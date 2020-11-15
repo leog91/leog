@@ -1,10 +1,22 @@
 import Link from "next/link";
+import Image from "next/image";
+
+import Header from "../components/header";
 
 import styles from "../styles/About.module.css";
 
 function About() {
   return (
     <>
+      <Header />
+      <Image
+        src="/fruit/pineapple.jpg"
+        alt="Picture of the author"
+        width={100}
+        height={100}
+        // unsized
+      />
+
       <div className="p-4 shadow rounded bg-white">
         <h1 className="text-purple-500 leading-normal">Next.js</h1>
         <p className="text-gray-500">with Tailwind CSS</p>
