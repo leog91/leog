@@ -5,7 +5,7 @@ import Header from "../components/header";
 
 import styles from "../styles/About.module.css";
 
-function About() {
+function Play() {
   return (
     <>
       <div className=" bg-blue-800 flex flex-col h-screen text-green-300 font-semibold place-items-center  ">
@@ -68,4 +68,4 @@ function About() {
   );
 }
 
-export default About;
+export default Play;

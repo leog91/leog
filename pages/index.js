@@ -28,6 +28,13 @@ export default function Home() {
             </a>
           </Link>
         </h1>
+        <h1 className="text-lg text-blue-700  font-extrabold">
+          <Link href="/player">
+            <a>
+              {"<"}Player !{">"}
+            </a>
+          </Link>
+        </h1>
         <p className={styles.description}>
           Get started by editing{" "}
           <code className={styles.code}>pages/index.js</code>
