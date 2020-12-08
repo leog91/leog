@@ -14,7 +14,12 @@ function About() {
           <div className="flex my-8 flex-row h-16 items-center ">
             <div className="m-2 text-xl">#1</div>
             <div className="m-2 rounded-full text-gray-200 bg-green-600 h-20 w-20 flex items-center justify-center">
-              Logo1
+              <Image
+                src="/fruit/shakespeare.jpg"
+                alt="Picture of the author"
+                width={65}
+                height={65}
+              />
             </div>
             <div className="m-2 text-lg flex flex-col">
               <div className="text-white ">Song1</div>
@@ -34,7 +39,12 @@ function About() {
           <div className="flex my-8 flex-row h-16 items-center ">
             <div className="m-2 text-xl">#3</div>
             <div className="m-2 rounded-full text-gray-200 bg-green-600 h-20 w-20 flex items-center justify-center">
-              Logo3
+              <Image
+                src="/fruit/ludwig-van-beethoven.jpg"
+                alt="Picture of the author"
+                width={65}
+                height={65}
+              />
             </div>
             <div className="m-2 text-lg flex flex-col">
               <div className="text-white ">Song3</div>
