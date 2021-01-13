@@ -44,7 +44,7 @@ export default function Home() {
           </Link>
         </h1>
         <p className={styles.description}>
-          Get started by editing{" "}
+          Get started by editing test
           <code className={styles.code}>pages/index.js</code>
         </p>
 
