@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
-export default function Home() {
+export default function Home({ title, description, ...props }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -35,6 +35,9 @@ export default function Home() {
             </a>
           </Link>
         </h1>
+
+        <div>{description}</div>
+        <div>{title}</div>
 
         <h1 className="text-lg text-purple-700  font-extrabold">
           <Link href="/friendActivity">
@@ -91,4 +94,15 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const configData = await import(`../siteconfig.json`);
+
+  return {
+    props: {
+      title: configData.default.title,
+      description: configData.default.description,
+    },
+  };
 }

@@ -132,6 +132,12 @@ function Player() {
         <div className=" bg-blue-800 flex flex-col h-screen text-green-300 font-semibold place-items-center  ">
           <div className="mt-auto mb-5">Share this</div>
         </div>
+        {/* audioComponent */}
+        {/* <div>
+          <audio controls src="audio/Dee Yan-Key - Forlorn City.mp3">
+            Your browser does not support the audio element.
+          </audio>
+        </div> */}
       </div>
     </>
   );
