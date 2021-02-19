@@ -2,11 +2,14 @@ import Link from "next/link";
 import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
 
-export default function PhotoPost({ frontmatter, markdownBody }) {
+export default function BlogPost({ frontmatter, markdownBody }) {
   if (!frontmatter) return <></>;
 
   return (
     <>
+      <Link href="/">
+        <a>Back to post list</a>
+      </Link>
       <article>
         <h1>{frontmatter.title}</h1>
         <p>By {frontmatter.author}</p>
@@ -19,9 +22,9 @@ export default function PhotoPost({ frontmatter, markdownBody }) {
 }
 
 export async function getStaticProps({ ...ctx }) {
-  const { photo } = ctx.params;
+  const { postname } = ctx.params;
 
-  const content = await import(`../../photos/${photo}.md`);
+  const content = await import(`../../posts/${postname}.md`);
   const config = await import(`../../siteconfig.json`);
   const data = matter(content.default);
 
@@ -42,9 +45,9 @@ export async function getStaticPaths() {
       return slug;
     });
     return data;
-  })(require.context("../../photos", true, /\.md$/));
+  })(require.context("../../posts", true, /\.md$/));
 
-  const paths = blogSlugs.map((slug) => `/photography/${slug}`);
+  const paths = blogSlugs.map((slug) => `/post/${slug}`);
 
   return {
     paths,
