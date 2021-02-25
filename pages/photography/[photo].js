@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+
 import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
 
@@ -7,12 +9,20 @@ export default function PhotoPost({ frontmatter, markdownBody }) {
 
   return (
     <>
-      <article>
-        <h1>{frontmatter.title}</h1>
+      <article className="bg-gray-300">
+        <div className="text-gray-700 text-xl font-bold">
+          {frontmatter.title}
+        </div>
         <p>By {frontmatter.author}</p>
         <div>
           <ReactMarkdown source={markdownBody} />
         </div>
+        <Image
+          className="p-0"
+          src={frontmatter.image}
+          alt={frontmatter.title}
+          unsized
+        />
       </article>
     </>
   );
