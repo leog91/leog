@@ -15,12 +15,18 @@ export default function Recipe({ frontmatter, markdownBody }) {
             {frontmatter.title}
           </div>
           <p>By {frontmatter.author}</p>
-          <div>
+          <div className="my-3">
             {frontmatter.ingredients &&
               frontmatter.ingredients.map(
                 (v, i) =>
                   `${v}${i === frontmatter.ingredients.length - 1 ? "" : ","} `
               )}
+          </div>
+          <div className="my-3">
+            <ul>
+              {frontmatter.nutrition &&
+                frontmatter.nutrition.map((v) => <li key={v}>{v}</li>)}
+            </ul>
           </div>
           <div>
             <ReactMarkdown source={markdownBody} />
