@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
+import Nutrition from "../../components/cook/nutrition";
 
 export default function Recipe({ frontmatter, markdownBody }) {
   if (!frontmatter) return <></>;
@@ -22,12 +23,11 @@ export default function Recipe({ frontmatter, markdownBody }) {
                   `${v}${i === frontmatter.ingredients.length - 1 ? "" : ","} `
               )}
           </div>
-          <div className="my-3">
-            <ul>
-              {frontmatter.nutrition &&
-                frontmatter.nutrition.map((v) => <li key={v}>{v}</li>)}
-            </ul>
-          </div>
+
+          {frontmatter.nutrition && (
+            <Nutrition nutrition={frontmatter.nutrition} />
+          )}
+
           <div>
             <ReactMarkdown source={markdownBody} />
           </div>
