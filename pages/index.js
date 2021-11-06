@@ -15,6 +15,14 @@ export default function Home({ title, description, ...props }) {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
+        <h1 className="text-lg text-red-800  font-extrabold">
+          <Link href="/stash">
+            <a>
+              {"<"}Stash !{">"}
+            </a>
+          </Link>
+        </h1>
+
         <h2>
           <Link href="/about">
             <a>About Us</a>

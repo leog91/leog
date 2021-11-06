@@ -1,0 +1,7 @@
+{
+  "emmet.triggerExpansionOnTab": true,
+  "tailwindCSS.emmetCompletions": true,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  }
+}
