@@ -24,7 +24,15 @@ export const SwapHistory = (props) => {
               className="m-1 h-32 w-32  bg-red-400  flex flex-col items-center justify-start"
               key={i}
             >
-              {<div className="text-xl font-bold my-2">{i + 1}</div>}
+              {
+                <div className="text-xl font-bold my-2">
+                  {props.steps === 1
+                    ? props.steps
+                    : props.steps === 2
+                    ? props.steps + i - 1
+                    : props.steps + i - 2}
+                </div>
+              }
               <div className="my-1">id: {e[0].id}</div>
               <div>🔀</div>
               <div>id: {e[1].id}</div>

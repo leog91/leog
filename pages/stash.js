@@ -12,6 +12,8 @@ function Stash() {
 
   const [swapHistory, setSwapHistory] = useState([]);
 
+  const [steps, setSteps] = useState(0);
+
   const [vault, setVault] = useState([
     {
       name: "tab1",
@@ -43,6 +45,8 @@ function Stash() {
       [itemA, itemB],
     ]);
 
+    setSteps(steps + 1);
+
     setSelected(null);
   };
 
@@ -63,7 +67,11 @@ function Stash() {
             swap={swap}
           />
           <Divider />
-          <SwapHistory swapHistory={swapHistory} selected={selected} />
+          <SwapHistory
+            swapHistory={swapHistory}
+            selected={selected}
+            steps={steps}
+          />
           <Divider />
           <Footer />
         </div>
