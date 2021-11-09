@@ -44,7 +44,7 @@ function Matrox() {
     const interval = setInterval(() => {
       index > 5 ? setIndex(0) : setIndex(index + 1);
 
-      console.log(index);
+      // console.log(index);
     }, 300);
     return () => clearInterval(interval);
   }, [index]);
