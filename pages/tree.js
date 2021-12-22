@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Badge } from "../components/atomic/Badge";
+//remove
+import archer from "../public/age/4.png";
 
 //to-do
 const Elem = ({ c, i, setTooltip }) => {
@@ -33,6 +35,30 @@ const Tree = () => {
       name: "name2",
       info: "info2",
       img: "img",
+    },
+  ];
+
+  const data3 = [
+    {
+      pos: [2, 2],
+      name: "Archery Range",
+      info: "Used to train and upgrade archer units.",
+      cost: { wood: 175 },
+      img: "87",
+    },
+    {
+      pos: [0, 3],
+      name: "Archer",
+      info: "Ranged unit. Strong vs. units at long range. Weak vs. Skirmishers and units at close range.",
+      cost: { wood: 25, gold: 45 },
+      img: "4",
+    },
+
+    {
+      pos: [1, 3],
+      name: "Skirmisher",
+      info: "Ranged anti-archer unit that cannot attack at close range. Strong vs. archers. Weak vs. units at close range.",
+      img: "7",
     },
   ];
 
@@ -137,6 +163,7 @@ const Tree = () => {
           <Badge label={"Sarasa"} />
         </div>
       </div>
+      <img className="w-9" src="/age/4.png"></img>
     </>
   );
 };
