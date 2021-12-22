@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Badge } from "../components/atomic/Badge";
 
 //to-do
 const Elem = ({ c, i, setTooltip }) => {
@@ -114,11 +115,27 @@ const Tree = () => {
           </div>
         ))}
       </div>
-
       <div className="flex m-auto mt-8 justify-center  rounded-full items-center w-28 h-12 bg-red-500  ">
         {tooltip && (
           <div className="bg-red-300 px-3 py-1 rounded-full"> {tooltip}</div>
         )}
+      </div>
+      from end to start, linear?, quad?, mid point ,
+      <div className="m-4 w-24 h-24">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <polyline stroke="black" fill="none" points={`0,0 100,100`} />
+        </svg>
+      </div>
+      <div className="m-4 flex">
+        <div className="m-2">
+          <Badge />
+        </div>
+        <div className="m-2">
+          <Badge />
+        </div>
+        <div className="m-2">
+          <Badge label={"Sarasa"} />
+        </div>
       </div>
     </>
   );
