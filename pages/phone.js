@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, createContext, useContext } from "react";
 
-// const AppContext = React.createContext({ context: "Home" });
+const NotesContext = React.createContext();
 
 export const Home = ({ setContext }) => {
   return (
@@ -22,15 +22,18 @@ export const Home = ({ setContext }) => {
 };
 
 export const Notes = () => {
-  const [note, setNote] = useState("");
+  const { note, setNote } = useContext(NotesContext);
+
   return (
     <div className="flex-col px-3">
       <div>Notes</div>
+
       <textarea
         className=" w-full h-80"
         onChange={(e) => setNote(e.target.value)}
         value={note}
       ></textarea>
+
       <button onClick={() => alert(note)}>Save</button>
     </div>
   );
@@ -39,7 +42,7 @@ export const Player = () => {
   return <div className="">Player</div>;
 };
 
-export const Main = ({ context, setContext }) => {
+export const Main = ({ context }) => {
   return <div className="h-[32rem] bg-orange-500  w-full">{context}</div>;
 };
 
@@ -54,12 +57,17 @@ export const NotificationBar = () => {
 
 function Phone() {
   const [context, setContext] = useState("Home");
+  const [note, setNote] = useState("");
 
   let main;
 
   switch (context) {
     case "Notes":
-      main = <Notes />;
+      main = (
+        <NotesContext.Provider value={{ note, setNote }}>
+          <Notes />{" "}
+        </NotesContext.Provider>
+      );
       break;
     case "Player":
       main = <Player />;
