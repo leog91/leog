@@ -22,6 +22,18 @@ function Walker() {
   const [step, setStep] = useState(0);
   const items = Array(100).fill({});
 
+  const [map, setMap] = useState([[]]);
+
+  const initialMap = Array(10)
+    .fill(Array(10).fill(""))
+    .map((c, ix) => c.map((elem, ir) => `x${ix}y${ir}`));
+
+  // column row
+
+  // const res = mapp.map((c, ix) => c.map((elem, ir) => `x${ix}y${ir}`));
+
+  // console.log("res", res);
+
   const [grid, setGrid] = useState([
     ["O", "O", "O", "O"],
     ["O", "O", "O", "O"],
@@ -35,8 +47,8 @@ function Walker() {
   });
 
   const [walkerPosition, setWalkerPosition] = useState({
-    x: 1,
-    y: 1,
+    x: 0,
+    y: 0,
   });
 
   const move = () => {
@@ -50,15 +62,50 @@ function Walker() {
     setStep(step + 1);
   };
 
+  useEffect(() => {
+    const newMap = [...initialMap];
+    newMap[0][0] = "player";
+
+    setMap(newMap);
+  }, []);
+
+  useEffect(() => {
+    const newMap = [...initialMap];
+    newMap[walkerPosition.x][walkerPosition.y] = "player";
+
+    setMap(newMap);
+  }, [walkerPosition]);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (
+        ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(
+          e.code
+        ) > -1
+      ) {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown, false);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  });
+
   const moveDown = () => {
-    console.log("moving Down");
-    console.log("position", walkerPosition);
+    if (walkerPosition.y === 9) return;
     setWalkerPosition({ ...walkerPosition, y: walkerPosition.y + 1 });
   };
 
+  const moveLeft = () => {
+    if (walkerPosition.x === 0) return;
+    setWalkerPosition({ ...walkerPosition, x: walkerPosition.x - 1 });
+  };
+  const moveRight = () => {
+    if (walkerPosition.x === 9) return;
+    setWalkerPosition({ ...walkerPosition, x: walkerPosition.x + 1 });
+  };
+
   const moveUp = () => {
-    console.log("moving Up");
-    console.log("position", walkerPosition);
+    if (walkerPosition.y === 0) return;
     setWalkerPosition({ ...walkerPosition, y: walkerPosition.y - 1 });
   };
 
@@ -74,7 +121,27 @@ function Walker() {
   };
 
   const handler = (e) => {
-    console.log("handler", e.key);
+    // console.log("handler", e);
+
+    // console.log("handler", e.key);
+
+    switch (e.key) {
+      case "ArrowUp":
+        moveUp();
+        break;
+      case "ArrowRight":
+        moveRight();
+        break;
+      case "ArrowLeft":
+        moveLeft();
+        break;
+      case "ArrowDown":
+        moveDown();
+        break;
+
+      default:
+        break;
+    }
   };
 
   /*
@@ -87,7 +154,7 @@ function Walker() {
 
   return (
     <>
-      <div onKeyPress={(e) => handler(e)}>
+      <div tabIndex="0" onKeyDown={(e) => handler(e)}>
         <div className=" bg-blue-800 flex flex-col  text-green-300 font-semibold place-items-center  ">
           <div className="text-4xl   mb-8">Walker</div>
           <div>steps = {step}</div>
@@ -103,10 +170,63 @@ function Walker() {
             ))}
           </div>
 
+          <div className="grid grid-cols-3 text-center text-2xl ">
+            <div> </div>
+
+            <div
+              onClick={() => moveUp()}
+              className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
+            >
+              ▲
+            </div>
+            <div> </div>
+            <div
+              onClick={() => moveLeft()}
+              className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
+            >
+              ◄
+            </div>
+            <div
+              onClick={() => moveDown()}
+              className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
+            >
+              ▼
+            </div>
+            <div
+              onClick={() => moveRight()}
+              className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
+            >
+              ►
+            </div>
+          </div>
+
+          <div>
+            {" "}
+            currentPos = x:{walkerPosition.x} / y:{walkerPosition.y}
+          </div>
+
+          <div className="flex p-3 m-3 bg-blue-900">
+            {map.map((e, i) => (
+              <div key={i} className=" text-center ">
+                {/* [x:{i}]{" "} */}
+                {e.map((j) => (
+                  <div
+                    className="m-1 bg-blue-500 h-8 w-8 hover:bg-red-200"
+                    key={j}
+                  >
+                    {j === "player" ? "x" : ""}
+                    {/* {}
+                    {j}{" "} */}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+
           <button
             onClick={() => move()}
-            //   onKeyPress={(e) => handler(e)}
-            className="bg-indigo-500 text-white w-full p-3 rounded-lg mt-8 hover:bg-indigo-700"
+            onKeyPress={(e) => handler(e)}
+            className="bg-indigo-500 text-white  p-3 w-14 h-14 mt-8  hover:bg-indigo-700"
           >
             {" "}
             move
