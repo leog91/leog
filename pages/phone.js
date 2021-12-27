@@ -25,16 +25,21 @@ export const Notes = () => {
   const { note, setNote } = useContext(NotesContext);
 
   return (
-    <div className="flex-col px-3">
+    <div className="flex flex-col px-3">
       <div>Notes</div>
 
       <textarea
-        className=" w-full h-80"
+        className=" w-full h-80 resize-none bg-yellow-100 rounded-lg p-1 pt-3"
         onChange={(e) => setNote(e.target.value)}
         value={note}
       ></textarea>
 
-      <button onClick={() => alert(note)}>Save</button>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-4 py-2 px-4  rounded-full "
+        onClick={() => alert(note)}
+      >
+        Save
+      </button>
     </div>
   );
 };
