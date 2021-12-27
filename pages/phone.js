@@ -1,6 +1,7 @@
 import React, { useState, createContext, useContext } from "react";
 
 const NotesContext = React.createContext();
+const PlayerContext = React.createContext();
 
 export const Home = ({ setContext }) => {
   return (
@@ -44,7 +45,55 @@ export const Notes = () => {
   );
 };
 export const Player = () => {
-  return <div className="">Player</div>;
+  const { player, setPlayer } = useContext(PlayerContext);
+
+  return (
+    <div className="flex flex-col">
+      Player
+      <div className="flex flex-col place-items-center">
+        <div className="pt-9">
+          <img
+            src="/fruit/shakespeare.jpg"
+            alt="Picture of the author"
+
+            // width={150}
+            // height={150}
+          />
+        </div>
+        <div className="text-white  m-3 font-semibold">{player.song.name}</div>
+        <div className="text-gray-400">{player.song.artist}</div>
+
+        <div className=" bg-white p-0.5 rounded-full w-28 m-4">
+          <div className="bg-gray-800 text-white text-xs  font-semibold rounded-full text-center  p-1">
+            ADD SONG
+          </div>
+        </div>
+      </div>
+      <div className="flex justify-center">
+        <div className="m-1 hover:text-red-700 hover:cursor-pointer">🔀</div>
+        <div className="m-1 hover:text-red-700 hover:cursor-pointer">⏮</div>
+
+        {player.status === "pause" ? (
+          <div
+            onClick={() => setPlayer({ ...player, status: "playing" })}
+            className="m-1 hover:text-red-700 hover:cursor-pointer"
+          >
+            ▶
+          </div>
+        ) : (
+          <div
+            onClick={() => setPlayer({ ...player, status: "pause" })}
+            className="m-1 hover:text-red-700 hover:cursor-pointer"
+          >
+            ⏸
+          </div>
+        )}
+
+        <div className="m-1 hover:text-red-700 hover:cursor-pointer">⏭</div>
+        <div className="m-1 hover:text-red-700 hover:cursor-pointer">🔁</div>
+      </div>
+    </div>
+  );
 };
 
 export const Main = ({ context }) => {
@@ -63,6 +112,10 @@ export const NotificationBar = () => {
 function Phone() {
   const [context, setContext] = useState("Home");
   const [note, setNote] = useState("");
+  const [player, setPlayer] = useState({
+    status: "pause",
+    song: { name: "song name", artist: "artist" },
+  });
 
   let main;
 
@@ -75,7 +128,11 @@ function Phone() {
       );
       break;
     case "Player":
-      main = <Player />;
+      main = (
+        <PlayerContext.Provider value={{ player, setPlayer }}>
+          <Player />
+        </PlayerContext.Provider>
+      );
       break;
 
     default:
