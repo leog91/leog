@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
-
-const RIGHT = "RIGHT";
-const LEFT = "LEFT";
-const UP = "UP";
-const DOWN = "DOWN";
+import MapCel from "../components/walker/MapCel";
+import { RIGHT, LEFT, UP, DOWN } from "../constants/walker";
 
 const MAP_ELEM = {
   TREE: { desc: "has leafs", code: "tree", interact: "feels rough" },
@@ -125,8 +122,25 @@ function Walker() {
       ? setWalkerPosition({ ...walkerPosition, x: walkerPosition.x - 1 })
       : setWalkerPosition({ ...walkerPosition, direction: LEFT });
   };
+  //todo
+  // mapDimensions
+  // map limits
+
   const moveRight = () => {
-    if (walkerPosition.x === 9) return;
+    // if (walkerPosition.x === 9) return;
+    // console.log(map.length);
+
+    //update
+    const hasRight = false;
+
+    if (walkerPosition.x === map.length - 1) {
+      if (hasRight) {
+        setMap(rightMap);
+        //useEffect(walkerInitialPosition)
+      }
+      return;
+    }
+
     walkerPosition.direction === RIGHT
       ? setWalkerPosition({ ...walkerPosition, x: walkerPosition.x + 1 })
       : setWalkerPosition({ ...walkerPosition, direction: RIGHT });
@@ -297,29 +311,27 @@ function Walker() {
                 <div key={i} className=" text-center ">
                   {/* [x:{i}]{" "} */}
                   {e.map((j) => (
-                    <div
-                      className="m-1 bg-blue-500 h-8 w-8 hover:bg-red-200"
-                      key={j}
-                    >
-                      {/* ➤{j === "player" ? "x" : ""} */}
-                      {j === "player"
-                        ? walkerPosition.direction === RIGHT
-                          ? "►"
-                          : walkerPosition.direction === LEFT
-                          ? "◄"
-                          : walkerPosition.direction === UP
-                          ? "▲"
-                          : "▼ "
-                        : // : ""}
-                        j === "tree"
-                        ? "🌳"
-                        : j === "mushroom"
-                        ? "🍄"
-                        : ""}
-
-                      {/* {}
-                    {j}{" "} */}
-                    </div>
+                    <MapCel key={j} cell={j} walkerPosition={walkerPosition} />
+                    // <div
+                    //   className="m-1 bg-blue-500 h-8 w-8 hover:bg-red-200"
+                    //   key={j}
+                    // >
+                    //   {/* ➤{j === "player" ? "x" : ""} */}
+                    //   {j === "player"
+                    //     ? walkerPosition.direction === RIGHT
+                    //       ? "►"
+                    //       : walkerPosition.direction === LEFT
+                    //       ? "◄"
+                    //       : walkerPosition.direction === UP
+                    //       ? "▲"
+                    //       : "▼ "
+                    //     : // : ""}
+                    //     j === "tree"
+                    //     ? "🌳"
+                    //     : j === "mushroom"
+                    //     ? "🍄"
+                    //     : ""}
+                    // </div>
                   ))}
                 </div>
               ))}
