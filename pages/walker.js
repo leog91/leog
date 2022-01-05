@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import MapCel from "../components/walker/MapCel";
 import { RIGHT, LEFT, UP, DOWN } from "../constants/walker";
+import {
+  emptyMap,
+  newemptyMap,
+  initialMap,
+  RightMap,
+  getMap,
+} from "../utils/walker/world";
 
 const MAP_ELEM = {
   TREE: { desc: "has leafs", code: "tree", interact: "feels rough" },
@@ -38,13 +45,28 @@ function Walker() {
 
   const [interactionTarget, setInteractionTarget] = useState(null);
 
-  const initialMap = Array(10)
-    .fill(Array(10).fill(""))
-    .map((c, ix) => c.map((elem, ir) => `x${ix}y${ir}`));
+  // const initialMap = Array(10)
+  //   .fill(Array(10).fill(""))
+  //   .map((c, ix) => c.map((elem, ir) => `x${ix}y${ir}`));
 
-  initialMap[3][3] = "tree";
+  // const initialMap = emptyMap();
 
-  initialMap[5][3] = "mushroom";
+  // initialMap[3][3].content = "tree";
+
+  // initialMap[5][3].content = "mushroom";
+
+  // initialMap[9][2].content = "wall";
+  // initialMap[9][3].content = "wall";
+  // initialMap[9][4].content = "wall";
+  // initialMap[9][7].content = "wall";
+  // initialMap[9][8].content = "wall";
+  // initialMap[9][9].content = "wall";
+
+  // initialMap[9][6].passage = { map: [2, 1], walkerPosition: [0, 5] };
+
+  // console.log(">>>>>>", newemptyMap());
+
+  // console.log(initialMap);
 
   // column row
 
@@ -82,17 +104,16 @@ function Walker() {
   };
 
   useEffect(() => {
-    const newMap = [...initialMap];
-    newMap[0][0] = "player";
+    const newMap = [...initialMap()];
+    // newMap[0][0].content = "player";
 
     setMap(newMap);
   }, []);
 
   useEffect(() => {
-    const newMap = [...initialMap];
-    newMap[walkerPosition.x][walkerPosition.y] = "player";
-
-    setMap(newMap);
+    // const newMap = [...initialMap()];
+    // newMap[walkerPosition.x][walkerPosition.y].content = "player";
+    // setMap(newMap);
   }, [walkerPosition]);
 
   useEffect(() => {
@@ -110,47 +131,111 @@ function Walker() {
   });
 
   const moveDown = () => {
-    if (walkerPosition.y === 9) return;
-    walkerPosition.direction === DOWN
-      ? setWalkerPosition({ ...walkerPosition, y: walkerPosition.y + 1 })
-      : setWalkerPosition({ ...walkerPosition, direction: DOWN });
-  };
-
-  const moveLeft = () => {
-    if (walkerPosition.x === 0) return;
-    walkerPosition.direction === LEFT
-      ? setWalkerPosition({ ...walkerPosition, x: walkerPosition.x - 1 })
-      : setWalkerPosition({ ...walkerPosition, direction: LEFT });
-  };
-  //todo
-  // mapDimensions
-  // map limits
-
-  const moveRight = () => {
-    // if (walkerPosition.x === 9) return;
-    // console.log(map.length);
-
-    //update
-    const hasRight = false;
-
-    if (walkerPosition.x === map.length - 1) {
-      if (hasRight) {
-        setMap(rightMap);
-        //useEffect(walkerInitialPosition)
-      }
+    if (walkerPosition.direction !== DOWN) {
+      setWalkerPosition({ ...walkerPosition, direction: DOWN });
       return;
     }
 
-    walkerPosition.direction === RIGHT
-      ? setWalkerPosition({ ...walkerPosition, x: walkerPosition.x + 1 })
-      : setWalkerPosition({ ...walkerPosition, direction: RIGHT });
+    if (map[walkerPosition.x][walkerPosition.y].passage?.direction === DOWN) {
+      setMap(getMap(map[walkerPosition.x][walkerPosition.y].passage.map));
+      setWalkerPosition({
+        ...walkerPosition,
+        x: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[0],
+        y: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[1],
+      });
+    }
+
+    if (
+      walkerPosition.y === map[0].length - 1 ||
+      map[walkerPosition.x][walkerPosition.y + 1].content === "wall"
+    ) {
+      return;
+    }
+
+    walkerPosition.direction === DOWN &&
+      setWalkerPosition({ ...walkerPosition, y: walkerPosition.y + 1 });
+  };
+
+  const moveLeft = () => {
+    if (walkerPosition.direction !== LEFT) {
+      setWalkerPosition({ ...walkerPosition, direction: LEFT });
+      return;
+    }
+
+    if (map[walkerPosition.x][walkerPosition.y].passage?.direction === LEFT) {
+      setMap(getMap(map[walkerPosition.x][walkerPosition.y].passage.map));
+      setWalkerPosition({
+        ...walkerPosition,
+        x: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[0],
+        y: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[1],
+      });
+    }
+
+    if (
+      walkerPosition.x === 0 ||
+      map[walkerPosition.x - 1][walkerPosition.y].content === "wall"
+    ) {
+      return;
+    }
+
+    walkerPosition.direction === LEFT &&
+      setWalkerPosition({ ...walkerPosition, x: walkerPosition.x - 1 });
+  };
+
+  const moveRight = () => {
+    if (walkerPosition.direction !== RIGHT) {
+      setWalkerPosition({ ...walkerPosition, direction: RIGHT });
+      return;
+    }
+
+    if (map[walkerPosition.x][walkerPosition.y].passage?.direction === RIGHT) {
+      setMap(getMap(map[walkerPosition.x][walkerPosition.y].passage.map));
+      setWalkerPosition({
+        ...walkerPosition,
+        x: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[0],
+        y: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[1],
+      });
+    }
+
+    if (
+      walkerPosition.x === map.length - 1 ||
+      map[walkerPosition.x + 1][walkerPosition.y].content === "wall"
+    ) {
+      return;
+    }
+
+    walkerPosition.direction === RIGHT &&
+      setWalkerPosition({ ...walkerPosition, x: walkerPosition.x + 1 });
   };
 
   const moveUp = () => {
-    if (walkerPosition.y === 0) return;
-    walkerPosition.direction === UP
-      ? setWalkerPosition({ ...walkerPosition, y: walkerPosition.y - 1 })
-      : setWalkerPosition({ ...walkerPosition, direction: UP });
+    if (walkerPosition.direction !== UP) {
+      setWalkerPosition({ ...walkerPosition, direction: UP });
+      return;
+    }
+
+    if (map[walkerPosition.x][walkerPosition.y].passage?.direction === UP) {
+      setMap(getMap(map[walkerPosition.x][walkerPosition.y].passage.map));
+      setWalkerPosition({
+        direction: map[walkerPosition.x][walkerPosition.y].passage.direction,
+        x: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[0],
+        y: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[1],
+      });
+    }
+
+    if (
+      walkerPosition.y === 0 ||
+      map[walkerPosition.x][walkerPosition.y - 1].content === "wall"
+    ) {
+      return;
+    }
+
+    walkerPosition.direction === UP &&
+      setWalkerPosition({ ...walkerPosition, y: walkerPosition.y - 1 });
+    // if (walkerPosition.y === 0) return;
+    // walkerPosition.direction === UP
+    //   ? setWalkerPosition({ ...walkerPosition, y: walkerPosition.y - 1 })
+    //   : setWalkerPosition({ ...walkerPosition, direction: UP });
   };
 
   const reset = () => {
@@ -194,23 +279,27 @@ function Walker() {
         // switch (walkerPosition.direction) {
         if (
           walkerPosition.direction === DOWN &&
-          map[walkerPosition.x][walkerPosition.y + 1] === "tree"
+          walkerPosition.y < map[0].length - 1 &&
+          map[walkerPosition.x][walkerPosition.y + 1].content === "tree"
         )
           setInteractionTarget(MAP_ELEM.TREE);
 
         if (
           walkerPosition.direction === UP &&
-          map[walkerPosition.x][walkerPosition.y - 1] === "tree"
+          walkerPosition.y > 0 &&
+          map[walkerPosition.x][walkerPosition.y - 1].content === "tree"
         )
           setInteractionTarget(MAP_ELEM.TREE);
         if (
           walkerPosition.direction === RIGHT &&
-          map[walkerPosition.x + 1][walkerPosition.y] === "tree"
+          walkerPosition.x < map.length - 1 &&
+          map[walkerPosition.x + 1][walkerPosition.y].content === "tree"
         )
           setInteractionTarget(MAP_ELEM.TREE);
         if (
           walkerPosition.direction === LEFT &&
-          map[walkerPosition.x - 1][walkerPosition.y] === "tree"
+          walkerPosition.x > 0 &&
+          map[walkerPosition.x - 1][walkerPosition.y].content === "tree"
         )
           setInteractionTarget(MAP_ELEM.TREE);
 
@@ -310,28 +399,16 @@ function Walker() {
               {map.map((e, i) => (
                 <div key={i} className=" text-center ">
                   {/* [x:{i}]{" "} */}
-                  {e.map((j) => (
-                    <MapCel key={j} cell={j} walkerPosition={walkerPosition} />
-                    // <div
-                    //   className="m-1 bg-blue-500 h-8 w-8 hover:bg-red-200"
-                    //   key={j}
-                    // >
-                    //   {/* ➤{j === "player" ? "x" : ""} */}
-                    //   {j === "player"
-                    //     ? walkerPosition.direction === RIGHT
-                    //       ? "►"
-                    //       : walkerPosition.direction === LEFT
-                    //       ? "◄"
-                    //       : walkerPosition.direction === UP
-                    //       ? "▲"
-                    //       : "▼ "
-                    //     : // : ""}
-                    //     j === "tree"
-                    //     ? "🌳"
-                    //     : j === "mushroom"
-                    //     ? "🍄"
-                    //     : ""}
-                    // </div>
+                  {e.map((j, iy) => (
+                    <MapCel
+                      key={j.id}
+                      cell={j}
+                      walkerPosition={
+                        walkerPosition.x === i && walkerPosition.y === iy
+                          ? walkerPosition
+                          : null
+                      }
+                    />
                   ))}
                 </div>
               ))}
