@@ -342,72 +342,6 @@ function Walker() {
       <div tabIndex="0" onKeyDown={(e) => handler(e.key)}>
         <div className=" bg-blue-800 flex flex-col  text-green-300 font-semibold place-items-center  ">
           <div className="text-4xl   mb-8">Walker</div>
-          <div>steps = {step}</div>
-          <div>
-            {grid.map((l, ixl) => (
-              <div key={ixl} className="flex">
-                {l.map((e, eix) => (
-                  <div className="flex" key={eix}>
-                    {e}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-
-          <div className="flex m-4">
-            <div className="grid mx-14 grid-cols-3 text-center text-2xl ">
-              <div> </div>
-
-              <div
-                onClick={() => moveUp()}
-                className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
-              >
-                ▲
-              </div>
-              <div> </div>
-              <div
-                onClick={() => moveLeft()}
-                className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
-              >
-                ◄
-              </div>
-              <div
-                onClick={() => moveDown()}
-                className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
-              >
-                ▼
-              </div>
-              <div
-                onClick={() => moveRight()}
-                className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
-              >
-                ►
-              </div>
-            </div>
-
-            <div className="flex bg-blue-500 items-center   rounded-3xl">
-              TODO
-              <div className="flex flex-col items-center">
-                <div>press z</div>
-                <button
-                  onClick={() => handler("z")}
-                  className="rounded-full m-2 w-16 h-16 bg-blue-900 font-black text-lg"
-                >
-                  z
-                </button>
-              </div>
-              <div className="flex flex-col items-center">
-                <div>press z</div>
-                <button
-                  onClick={() => handler("x")}
-                  className="rounded-full m-2 w-16 h-16 bg-blue-900 font-black text-lg"
-                >
-                  x
-                </button>
-              </div>
-            </div>
-          </div>
 
           <div>
             {" "}
@@ -415,7 +349,7 @@ function Walker() {
           </div>
           <div>direction = {walkerPosition.direction}</div>
 
-          <div className="flex">
+          <div className="flex flex-col items-center sm:flex-row">
             <div className="flex p-3 m-3 bg-blue-900">
               {map.map((e, i) => (
                 <div key={i} className=" text-center ">
@@ -456,6 +390,59 @@ function Walker() {
                     )}
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex ">
+            <div className="grid grid-cols-3 text-center text-2xl content-center m-6">
+              <div> </div>
+
+              <div
+                onClick={() => moveUp()}
+                className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
+              >
+                ▲
+              </div>
+              <div> </div>
+              <div
+                onClick={() => moveLeft()}
+                className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
+              >
+                ◄
+              </div>
+              <div
+                onClick={() => moveDown()}
+                className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
+              >
+                ▼
+              </div>
+              <div
+                onClick={() => moveRight()}
+                className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
+              >
+                ►
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row bg-blue-500 items-center   rounded-3xl m-6">
+              <div className="flex flex-col items-center">
+                <div>press z</div>
+                <button
+                  onClick={() => handler("z")}
+                  className="rounded-full m-2 w-16 h-16 bg-blue-900 font-black text-lg"
+                >
+                  z
+                </button>
+              </div>
+              <div className="flex flex-col items-center">
+                <div>press z</div>
+                <button
+                  onClick={() => handler("x")}
+                  className="rounded-full m-2 w-16 h-16 bg-blue-900 font-black text-lg"
+                >
+                  x
+                </button>
               </div>
             </div>
           </div>
