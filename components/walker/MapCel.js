@@ -18,12 +18,14 @@ function MapCel({ cell, walkerPosition }) {
         ) : (
           "▼ "
         )
-      ) : cell.content === "tree" ? (
+      ) : cell.content === "TREE" ? (
         <img className="" src="/walker/icons/tree.svg" />
-      ) : cell.content === "mushroom" ? (
+      ) : cell.content === "MUSHROOM" ? (
         <img className="p-1" src="/walker/icons/mushroom.svg" />
-      ) : cell.content === "wall" ? (
+      ) : cell.content === "WALL" ? (
         "⬛"
+      ) : cell.content === "WELL" ? (
+        <img className="" src="/walker/icons/well.svg" />
       ) : (
         ""
       )}

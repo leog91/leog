@@ -9,11 +9,18 @@ import {
   getMap,
 } from "../utils/walker/world";
 
+//mobile
+// ..
+//move-constants
 const MAP_ELEM = {
   TREE: { desc: "has leafs", code: "tree", interact: "feels rough" },
   ROCK: { desc: "heavy", code: "rock" },
   MUSHROOM: { desc: "power up", code: "mushroom" },
+  WALL: { desc: "BIG", interact: "road blocked", code: "WALL" },
+  WELL: { desc: "seems deep", interact: "can drink", code: "WELL" },
 };
+
+// canPick, water?, terrain Bg, pick fruit, drink water,
 
 const canPick = [MAP_ELEM.MUSHROOM];
 
@@ -147,7 +154,7 @@ function Walker() {
 
     if (
       walkerPosition.y === map[0].length - 1 ||
-      map[walkerPosition.x][walkerPosition.y + 1].content === "wall"
+      map[walkerPosition.x][walkerPosition.y + 1].content === MAP_ELEM.WALL.code
     ) {
       return;
     }
@@ -173,7 +180,7 @@ function Walker() {
 
     if (
       walkerPosition.x === 0 ||
-      map[walkerPosition.x - 1][walkerPosition.y].content === "wall"
+      map[walkerPosition.x - 1][walkerPosition.y].content === MAP_ELEM.WALL.code
     ) {
       return;
     }
@@ -199,7 +206,7 @@ function Walker() {
 
     if (
       walkerPosition.x === map.length - 1 ||
-      map[walkerPosition.x + 1][walkerPosition.y].content === "wall"
+      map[walkerPosition.x + 1][walkerPosition.y].content === MAP_ELEM.WALL.code
     ) {
       return;
     }
@@ -225,7 +232,7 @@ function Walker() {
 
     if (
       walkerPosition.y === 0 ||
-      map[walkerPosition.x][walkerPosition.y - 1].content === "wall"
+      map[walkerPosition.x][walkerPosition.y - 1].content === MAP_ELEM.WALL.code
     ) {
       return;
     }
@@ -253,12 +260,12 @@ function Walker() {
     setInteractionTarget(null);
   }, [walkerPosition]);
 
-  const handler = (e) => {
+  const handler = (key) => {
     // console.log("handler", e);
 
     // console.log("handler", e.key);
 
-    switch (e.key) {
+    switch (key) {
       case "ArrowUp":
         moveUp();
         break;
@@ -280,28 +287,36 @@ function Walker() {
         if (
           walkerPosition.direction === DOWN &&
           walkerPosition.y < map[0].length - 1 &&
-          map[walkerPosition.x][walkerPosition.y + 1].content === "tree"
+          map[walkerPosition.x][walkerPosition.y + 1].content
         )
-          setInteractionTarget(MAP_ELEM.TREE);
+          setInteractionTarget(
+            MAP_ELEM[map[walkerPosition.x][walkerPosition.y + 1].content]
+          );
 
         if (
           walkerPosition.direction === UP &&
           walkerPosition.y > 0 &&
-          map[walkerPosition.x][walkerPosition.y - 1].content === "tree"
+          map[walkerPosition.x][walkerPosition.y - 1].content
         )
-          setInteractionTarget(MAP_ELEM.TREE);
+          setInteractionTarget(
+            MAP_ELEM[map[walkerPosition.x][walkerPosition.y - 1].content]
+          );
         if (
           walkerPosition.direction === RIGHT &&
           walkerPosition.x < map.length - 1 &&
-          map[walkerPosition.x + 1][walkerPosition.y].content === "tree"
+          map[walkerPosition.x + 1][walkerPosition.y].content
         )
-          setInteractionTarget(MAP_ELEM.TREE);
+          setInteractionTarget(
+            MAP_ELEM[map[walkerPosition.x + 1][walkerPosition.y].content]
+          );
         if (
           walkerPosition.direction === LEFT &&
           walkerPosition.x > 0 &&
-          map[walkerPosition.x - 1][walkerPosition.y].content === "tree"
+          map[walkerPosition.x - 1][walkerPosition.y].content
         )
-          setInteractionTarget(MAP_ELEM.TREE);
+          setInteractionTarget(
+            MAP_ELEM[map[walkerPosition.x - 1][walkerPosition.y].content]
+          );
 
         break;
 
@@ -309,7 +324,7 @@ function Walker() {
         setInteractionTarget(null);
         break;
       default:
-        console.log("key", e.key);
+        console.log("key", key);
         break;
     }
   };
@@ -324,7 +339,7 @@ function Walker() {
 
   return (
     <>
-      <div tabIndex="0" onKeyDown={(e) => handler(e)}>
+      <div tabIndex="0" onKeyDown={(e) => handler(e.key)}>
         <div className=" bg-blue-800 flex flex-col  text-green-300 font-semibold place-items-center  ">
           <div className="text-4xl   mb-8">Walker</div>
           <div>steps = {step}</div>
@@ -375,13 +390,19 @@ function Walker() {
               TODO
               <div className="flex flex-col items-center">
                 <div>press z</div>
-                <button className="rounded-full m-2 w-16 h-16 bg-blue-900 font-black text-lg">
+                <button
+                  onClick={() => handler("z")}
+                  className="rounded-full m-2 w-16 h-16 bg-blue-900 font-black text-lg"
+                >
                   z
                 </button>
               </div>
               <div className="flex flex-col items-center">
                 <div>press z</div>
-                <button className="rounded-full m-2 w-16 h-16 bg-blue-900 font-black text-lg">
+                <button
+                  onClick={() => handler("x")}
+                  className="rounded-full m-2 w-16 h-16 bg-blue-900 font-black text-lg"
+                >
                   x
                 </button>
               </div>
@@ -430,7 +451,7 @@ function Walker() {
                     )}
                     {interactionTarget.interact && (
                       <div>
-                        {"> action - "} {interactionTarget.interact}
+                        {"> [action] - "} {interactionTarget.interact}
                       </div>
                     )}
                   </div>

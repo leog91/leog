@@ -4,15 +4,6 @@ const cell = { position: { x: 0, y: 0 }, elem: "tree" };
 
 const mapSection = { position: { x: 0, y: 0 }, cells: [cell, cell, cell] };
 
-// const World = [[mapSection, mapSection, mapSection]];
-
-// const World = [];
-
-// export const emptyMap = (x = 10, y = 10) =>
-//   Array(x)
-//     .fill(Array(y).fill(""))
-//     .map((c, ix) => c.map((elem, ir) => `x${ix}y${ir}`));
-
 export const emptyMap = (x = 10, y = 10) =>
   Array(x)
     .fill(Array(y).fill(""))
@@ -27,16 +18,18 @@ export const emptyMap = (x = 10, y = 10) =>
 export const initialMap = () => {
   const map = emptyMap();
 
-  map[3][3].content = "tree";
+  map[3][3].content = "TREE";
 
-  map[5][3].content = "mushroom";
+  map[5][3].content = "MUSHROOM";
 
-  map[9][2].content = "wall";
-  map[9][3].content = "wall";
-  map[9][4].content = "wall";
-  map[9][7].content = "wall";
-  map[9][8].content = "wall";
-  map[9][9].content = "wall";
+  map[9][2].content = "WALL";
+  map[9][3].content = "WALL";
+  map[9][4].content = "WALL";
+  map[9][7].content = "WALL";
+  map[9][8].content = "WALL";
+  map[9][9].content = "WALL";
+
+  map[4][6].content = "WELL";
 
   map[9][6].passage = { map: "2-1", walkerPosition: [0, 5], direction: RIGHT };
 
@@ -50,16 +43,16 @@ export const initialMap = () => {
 export const RightMap = () => {
   const map = emptyMap();
 
-  map[2][3].content = "tree";
+  map[2][3].content = "TREE";
 
-  map[5][3].content = "mushroom";
+  map[5][3].content = "MUSHROOM";
 
-  map[5][2].content = "wall";
-  map[5][3].content = "wall";
-  map[5][4].content = "wall";
-  map[5][7].content = "wall";
-  map[5][8].content = "wall";
-  map[5][9].content = "wall";
+  map[5][2].content = "WALL";
+  map[5][3].content = "WALL";
+  map[5][4].content = "WALL";
+  map[5][7].content = "WALL";
+  map[5][8].content = "WALL";
+  map[5][9].content = "WALL";
 
   map[0][1].passage = { map: "1-1", walkerPosition: [9, 1], direction: LEFT };
 
