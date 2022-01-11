@@ -12,12 +12,31 @@ import {
 //mobile
 // ..
 //move-constants
+
+const FINITE = "FINITE";
+const INFINITE = "INFINITE";
+
 const MAP_ELEM = {
-  TREE: { desc: "has leafs", code: "tree", interact: "feels rough" },
+  TREE: {
+    desc: "has leafs",
+    code: "tree",
+    interact: "feels rough",
+    pick: INFINITE,
+  },
   ROCK: { desc: "heavy", code: "rock" },
-  MUSHROOM: { desc: "power up", code: "mushroom" },
+  MUSHROOM: { desc: "power up", code: "mushroom", pick: FINITE },
   WALL: { desc: "BIG", interact: "road blocked", code: "WALL" },
   WELL: { desc: "seems deep", interact: "can drink", code: "WELL" },
+};
+
+//constanst
+// const checkUniqueCode = () => true
+
+//check descriptions
+
+const INV_ELEM = {
+  MUSHROOM: { desc: "power up", code: "I_M", name: "mushroom" },
+  WATER: { desc: "power up", code: "I_W", name: "water" },
 };
 
 // canPick, water?, terrain Bg, pick fruit, drink water,
@@ -25,13 +44,6 @@ const MAP_ELEM = {
 const canPick = [MAP_ELEM.MUSHROOM];
 
 function Walker() {
-  //   const grid = [
-  //     ["O", "O", "O", "O"],
-  //     ["O", "O", "O", "O"],
-  //     ["O", "X", "O", "O"],
-  //     ["O", "O", "O", "O"],
-  //   ];
-
   //check keys, idx(ixiy)
 
   // render mode
@@ -45,48 +57,23 @@ function Walker() {
 
   // check keys
 
+  //on remove check
+  const [backpack, setBackpack] = useState({
+    gold: 2,
+    items: [
+      [1, INV_ELEM.WATER],
+      [3, INV_ELEM.MUSHROOM],
+    ],
+  });
+
   const [step, setStep] = useState(0);
   const items = Array(100).fill({});
 
   const [map, setMap] = useState([[]]);
 
-  const [interactionTarget, setInteractionTarget] = useState(null);
+  const initialInteractionBox = { cursor: 0, target: null };
 
-  // const initialMap = Array(10)
-  //   .fill(Array(10).fill(""))
-  //   .map((c, ix) => c.map((elem, ir) => `x${ix}y${ir}`));
-
-  // const initialMap = emptyMap();
-
-  // initialMap[3][3].content = "tree";
-
-  // initialMap[5][3].content = "mushroom";
-
-  // initialMap[9][2].content = "wall";
-  // initialMap[9][3].content = "wall";
-  // initialMap[9][4].content = "wall";
-  // initialMap[9][7].content = "wall";
-  // initialMap[9][8].content = "wall";
-  // initialMap[9][9].content = "wall";
-
-  // initialMap[9][6].passage = { map: [2, 1], walkerPosition: [0, 5] };
-
-  // console.log(">>>>>>", newemptyMap());
-
-  // console.log(initialMap);
-
-  // column row
-
-  // const res = mapp.map((c, ix) => c.map((elem, ir) => `x${ix}y${ir}`));
-
-  // console.log("res", res);
-
-  const [grid, setGrid] = useState([
-    ["O", "O", "O", "O"],
-    ["O", "O", "O", "O"],
-    ["O", "X", "O", "O"],
-    ["O", "O", "O", "O"],
-  ]);
+  const [interactionBox, setInteractionBox] = useState(initialInteractionBox);
 
   const [mapSize, setMapSize] = useState({
     x: 4,
@@ -99,29 +86,12 @@ function Walker() {
     direction: RIGHT,
   });
 
-  const move = () => {
-    console.log("moving");
-    setGrid([
-      ["O", "O", "O", "O"],
-      ["O", "O", "O", "O"],
-      ["O", "O", "X", "O"],
-      ["O", "O", "O", "O"],
-    ]);
-    setStep(step + 1);
-  };
-
   useEffect(() => {
     const newMap = [...initialMap()];
-    // newMap[0][0].content = "player";
-
     setMap(newMap);
   }, []);
 
-  useEffect(() => {
-    // const newMap = [...initialMap()];
-    // newMap[walkerPosition.x][walkerPosition.y].content = "player";
-    // setMap(newMap);
-  }, [walkerPosition]);
+  useEffect(() => {}, [walkerPosition]);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -239,25 +209,10 @@ function Walker() {
 
     walkerPosition.direction === UP &&
       setWalkerPosition({ ...walkerPosition, y: walkerPosition.y - 1 });
-    // if (walkerPosition.y === 0) return;
-    // walkerPosition.direction === UP
-    //   ? setWalkerPosition({ ...walkerPosition, y: walkerPosition.y - 1 })
-    //   : setWalkerPosition({ ...walkerPosition, direction: UP });
-  };
-
-  const reset = () => {
-    console.log("reseting");
-    setGrid([
-      ["O", "O", "O", "O"],
-      ["O", "O", "O", "O"],
-      ["O", "X", "O", "O"],
-      ["O", "O", "O", "O"],
-    ]);
-    setStep(0);
   };
 
   useEffect(() => {
-    setInteractionTarget(null);
+    setInteractionBox(initialInteractionBox);
   }, [walkerPosition]);
 
   const handler = (key) => {
@@ -289,39 +244,47 @@ function Walker() {
           walkerPosition.y < map[0].length - 1 &&
           map[walkerPosition.x][walkerPosition.y + 1].content
         )
-          setInteractionTarget(
-            MAP_ELEM[map[walkerPosition.x][walkerPosition.y + 1].content]
-          );
+          setInteractionBox({
+            ...initialInteractionBox,
+            target:
+              MAP_ELEM[map[walkerPosition.x][walkerPosition.y + 1].content],
+          });
 
         if (
           walkerPosition.direction === UP &&
           walkerPosition.y > 0 &&
           map[walkerPosition.x][walkerPosition.y - 1].content
         )
-          setInteractionTarget(
-            MAP_ELEM[map[walkerPosition.x][walkerPosition.y - 1].content]
-          );
+          setInteractionBox({
+            ...initialInteractionBox,
+            target:
+              MAP_ELEM[map[walkerPosition.x][walkerPosition.y - 1].content],
+          });
         if (
           walkerPosition.direction === RIGHT &&
           walkerPosition.x < map.length - 1 &&
           map[walkerPosition.x + 1][walkerPosition.y].content
         )
-          setInteractionTarget(
-            MAP_ELEM[map[walkerPosition.x + 1][walkerPosition.y].content]
-          );
+          setInteractionBox({
+            ...initialInteractionBox,
+            target:
+              MAP_ELEM[map[walkerPosition.x + 1][walkerPosition.y].content],
+          });
         if (
           walkerPosition.direction === LEFT &&
           walkerPosition.x > 0 &&
           map[walkerPosition.x - 1][walkerPosition.y].content
         )
-          setInteractionTarget(
-            MAP_ELEM[map[walkerPosition.x - 1][walkerPosition.y].content]
-          );
+          setInteractionBox({
+            ...initialInteractionBox,
+            target:
+              MAP_ELEM[map[walkerPosition.x - 1][walkerPosition.y].content],
+          });
 
         break;
 
       case "z":
-        setInteractionTarget(null);
+        setInteractionBox(initialInteractionBox);
         break;
       default:
         console.log("key", key);
@@ -329,22 +292,17 @@ function Walker() {
     }
   };
 
-  /*
-
-  position(x,y)?
-
-   */
-
-  useEffect(() => {}, [grid, step]);
-
   return (
     <>
-      <div tabIndex="0" onKeyDown={(e) => handler(e.key)}>
-        <div className=" bg-blue-800 flex flex-col  text-green-300 font-semibold place-items-center  ">
+      <div
+        className="bg-blue-800 h-screen"
+        tabIndex="0"
+        onKeyDown={(e) => handler(e.key)}
+      >
+        <div className="   flex flex-col bg-blue-800  text-green-300 font-semibold place-items-center  ">
           <div className="text-4xl   mb-8">Walker</div>
 
           <div>
-            {" "}
             currentPos = x:{walkerPosition.x} / y:{walkerPosition.y}
           </div>
           <div>direction = {walkerPosition.direction}</div>
@@ -369,27 +327,43 @@ function Walker() {
               ))}
             </div>
 
-            <div className="bg-sky-800 w-56 h-36 m-3 p-3">
-              <div className="font-bold text-center">*interaction box*</div>
-              <div>
-                {interactionTarget && (
+            <div>
+              <div className="">
+                <div className="font-bold text-center">Inventory</div>
+                <div className="pl-6">
+                  <div>{backpack.gold} gold</div>
                   <div>
-                    {" "}
-                    <div>
-                      {">"} {interactionTarget.code}
-                    </div>
-                    {interactionTarget.desc && (
-                      <div>
-                        {">"} {interactionTarget.desc}{" "}
+                    {backpack.items.map((i) => (
+                      <div key={i[1].code}>
+                        {i[0]} {i[1].name}
                       </div>
-                    )}
-                    {interactionTarget.interact && (
-                      <div>
-                        {"> [action] - "} {interactionTarget.interact}
-                      </div>
-                    )}
+                    ))}
                   </div>
-                )}
+                </div>
+              </div>
+
+              <div className="bg-sky-800 w-56 h-36 m-3 p-3">
+                <div className="font-bold text-center">*interaction box*</div>
+                <div>
+                  {interactionBox.target && (
+                    <div>
+                      {" "}
+                      <div>
+                        {">"} {interactionBox.target.code}
+                      </div>
+                      {interactionBox.target.desc && (
+                        <div>
+                          {">"} {interactionBox.target.desc}{" "}
+                        </div>
+                      )}
+                      {interactionBox.target.interact && (
+                        <div>
+                          {"> [action] - "} {interactionBox.target.interact}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -445,46 +419,6 @@ function Walker() {
                 </button>
               </div>
             </div>
-          </div>
-          <button
-            onClick={() => move()}
-            onKeyPress={(e) => handler(e)}
-            className="bg-indigo-500 text-white  p-3 w-14 h-14 mt-8  hover:bg-indigo-700"
-          >
-            {" "}
-            move
-          </button>
-          <button
-            onClick={() => reset()}
-            className="bg-indigo-500 text-white w-full p-3 rounded-lg mt-8 hover:bg-indigo-700"
-          >
-            {" "}
-            reset
-          </button>
-
-          <button
-            onClick={() => moveDown()}
-            //   onKeyPress={(e) => handler(e)}
-            className="bg-indigo-500 text-white w-full p-3 rounded-lg mt-8 hover:bg-indigo-700"
-          >
-            {" "}
-            moveDown
-          </button>
-          <button
-            onClick={() => moveUp()}
-            //   onKeyPress={(e) => handler(e)}
-            className="bg-indigo-500 text-white w-full p-3 rounded-lg mt-8 hover:bg-indigo-700"
-          >
-            {" "}
-            moveUp
-          </button>
-          <div className="mt-auto mb-5">Share this</div>
-          <div className="grid grid-cols-10  grid-rows-10 gap-1 bg-black">
-            {items.map((e, i) => (
-              <div key={i} className="bg-red-600 text-center hover:bg-red-200">
-                {i} : x{" "}
-              </div>
-            ))}
           </div>
         </div>
       </div>
