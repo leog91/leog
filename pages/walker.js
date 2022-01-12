@@ -1,43 +1,16 @@
 import { useState, useEffect } from "react";
 import MapCel from "../components/walker/MapCel";
-import { RIGHT, LEFT, UP, DOWN } from "../constants/walker";
-import {
-  emptyMap,
-  newemptyMap,
-  initialMap,
-  RightMap,
-  getMap,
-} from "../utils/walker/world";
+import { RIGHT, LEFT, UP, DOWN, MAP_ELEM, INV_ELEM } from "../constants/walker";
+import { initialMap, getMap } from "../utils/walker/world";
 
 //mobile
 // ..
 //move-constants
 
-const FINITE = "FINITE";
-const INFINITE = "INFINITE";
-
-const MAP_ELEM = {
-  TREE: {
-    desc: "has leafs",
-    code: "tree",
-    interact: "feels rough",
-    pick: INFINITE,
-  },
-  ROCK: { desc: "heavy", code: "rock" },
-  MUSHROOM: { desc: "power up", code: "mushroom", pick: FINITE },
-  WALL: { desc: "BIG", interact: "road blocked", code: "WALL" },
-  WELL: { desc: "seems deep", interact: "can drink", code: "WELL" },
-};
-
 //constanst
 // const checkUniqueCode = () => true
 
 //check descriptions
-
-const INV_ELEM = {
-  MUSHROOM: { desc: "power up", code: "I_M", name: "mushroom" },
-  WATER: { desc: "power up", code: "I_W", name: "water" },
-};
 
 // canPick, water?, terrain Bg, pick fruit, drink water,
 
@@ -66,19 +39,11 @@ function Walker() {
     ],
   });
 
-  const [step, setStep] = useState(0);
-  const items = Array(100).fill({});
-
   const [map, setMap] = useState([[]]);
 
   const initialInteractionBox = { cursor: 0, target: null };
 
   const [interactionBox, setInteractionBox] = useState(initialInteractionBox);
-
-  const [mapSize, setMapSize] = useState({
-    x: 4,
-    y: 4,
-  });
 
   const [walkerPosition, setWalkerPosition] = useState({
     x: 0,
@@ -216,10 +181,6 @@ function Walker() {
   }, [walkerPosition]);
 
   const handler = (key) => {
-    // console.log("handler", e);
-
-    // console.log("handler", e.key);
-
     switch (key) {
       case "ArrowUp":
         moveUp();
