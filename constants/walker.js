@@ -9,14 +9,15 @@ const INFINITE = "INFINITE";
 export const MAP_ELEM = {
   TREE: {
     desc: "has leafs",
-    code: "tree",
+    code: "TREE",
     interact: "feels rough",
     pick: INFINITE,
   },
   ROCK: { desc: "heavy", code: "rock" },
-  MUSHROOM: { desc: "power up", code: "mushroom", pick: FINITE },
+  MUSHROOM: { desc: "power up", code: "MUSHROOM", pick: FINITE },
   WALL: { desc: "BIG", interact: "road blocked", code: "WALL" },
   WELL: { desc: "seems deep", interact: "can drink", code: "WELL" },
+  TRADER: { desc: "looks rich", interact: "buy & sell", code: "TRADER" },
 };
 
 export const INV_ELEM = {

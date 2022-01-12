@@ -1,4 +1,4 @@
-import { DOWN, LEFT, RIGHT, UP } from "../../constants/walker";
+import { DOWN, LEFT, RIGHT, UP, MAP_ELEM } from "../../constants/walker";
 
 const cell = { position: { x: 0, y: 0 }, elem: "tree" };
 
@@ -18,18 +18,19 @@ export const emptyMap = (x = 10, y = 10) =>
 export const initialMap = () => {
   const map = emptyMap();
 
-  map[3][3].content = "TREE";
+  map[3][3].content = MAP_ELEM.TREE.code;
 
-  map[5][3].content = "MUSHROOM";
+  map[5][3].content = MAP_ELEM.MUSHROOM.code;
 
-  map[9][2].content = "WALL";
-  map[9][3].content = "WALL";
-  map[9][4].content = "WALL";
-  map[9][7].content = "WALL";
-  map[9][8].content = "WALL";
-  map[9][9].content = "WALL";
+  map[9][2].content = MAP_ELEM.WALL.code;
+  map[9][3].content = MAP_ELEM.WALL.code;
+  map[9][4].content = MAP_ELEM.WALL.code;
+  map[9][7].content = MAP_ELEM.WALL.code;
+  map[9][8].content = MAP_ELEM.WALL.code;
+  map[9][9].content = MAP_ELEM.WALL.code;
 
-  map[4][6].content = "WELL";
+  map[4][6].content = MAP_ELEM.WELL.code;
+  map[1][8].content = MAP_ELEM.TRADER.code;
 
   map[9][6].passage = { map: "2-1", walkerPosition: [0, 5], direction: RIGHT };
 
@@ -43,16 +44,16 @@ export const initialMap = () => {
 export const RightMap = () => {
   const map = emptyMap();
 
-  map[2][3].content = "TREE";
+  map[2][3].content = MAP_ELEM.TREE.code;
 
-  map[5][3].content = "MUSHROOM";
+  map[5][3].content = MAP_ELEM.MUSHROOM.code;
 
-  map[5][2].content = "WALL";
-  map[5][3].content = "WALL";
-  map[5][4].content = "WALL";
-  map[5][7].content = "WALL";
-  map[5][8].content = "WALL";
-  map[5][9].content = "WALL";
+  map[5][2].content = MAP_ELEM.WALL.code;
+
+  map[5][4].content = MAP_ELEM.WALL.code;
+  map[5][7].content = MAP_ELEM.WALL.code;
+  map[5][8].content = MAP_ELEM.WALL.code;
+  map[5][9].content = MAP_ELEM.WALL.code;
 
   map[0][1].passage = { map: "1-1", walkerPosition: [9, 1], direction: LEFT };
 
