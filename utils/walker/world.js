@@ -69,7 +69,6 @@ export const getMap = (coord) => {
       break;
     case "1-1":
       map = initialMap();
-      console.log("11111");
       break;
     case "2-1":
       map = RightMap();

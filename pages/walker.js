@@ -1,6 +1,15 @@
 import { useState, useEffect } from "react";
 import MapCel from "../components/walker/MapCel";
-import { RIGHT, LEFT, UP, DOWN, MAP_ELEM, INV_ELEM } from "../constants/walker";
+import {
+  RIGHT,
+  LEFT,
+  UP,
+  DOWN,
+  MAP_ELEM,
+  INV_ELEM,
+  FINITE,
+  getInvFromCode,
+} from "../constants/walker";
 import { initialMap, getMap } from "../utils/walker/world";
 
 //mobile
@@ -30,12 +39,11 @@ function Walker() {
 
   // check keys
 
-  //on remove check
   const [backpack, setBackpack] = useState({
     gold: 2,
     items: [
-      [1, INV_ELEM.WATER],
-      [3, INV_ELEM.MUSHROOM],
+      { item: INV_ELEM.WATER, qty: 1 },
+      { item: INV_ELEM.MUSHROOM, qty: 1 },
     ],
   });
 
@@ -51,12 +59,60 @@ function Walker() {
     direction: RIGHT,
   });
 
+  // const inventoryCodeMapping = (code) => interactionBox.target.i_code;
+
   useEffect(() => {
     const newMap = [...initialMap()];
     setMap(newMap);
   }, []);
 
   useEffect(() => {}, [walkerPosition]);
+
+  const addToBackpack = () => {
+    let item = backpack.items.find(
+      (i) => i.item.code === interactionBox.target.i_code
+    );
+
+    if (item) {
+      item.qty = item.qty + 1;
+    } else {
+      item = {};
+      item.item = getInvFromCode(interactionBox.target.i_code);
+      item.qty = 1;
+    }
+
+    setBackpack({
+      ...backpack,
+      items: [
+        ...backpack.items.filter(
+          (i) => i.item.code !== interactionBox.target.i_code
+        ),
+        item,
+      ],
+    });
+  };
+
+  //parameter?
+  //update
+  const removeFromBackpack = () => {
+    console.log("addtoback =>>");
+
+    let newItems = { ...backpack.items };
+
+    const i_code = inventoryCodeMapping(interactionBox.target.code);
+
+    //remove logic
+    if (backpack.items[i_code] > 1) {
+      newItems[i_code] = newItems[i_code] - 1;
+
+      console.log("removing on >1");
+    } else {
+      console.log(newItems, "full items");
+      delete newItems[i_code];
+      console.log(newItems, "newwwwitems");
+    }
+    setBackpack({ ...backpack, items: newItems });
+  };
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -196,10 +252,22 @@ function Walker() {
         break;
 
       case "x":
-        console.log("pressing x");
+        if (interactionBox.target?.pick) {
+          addToBackpack();
 
-        console.log(walkerPosition.direction);
-        // switch (walkerPosition.direction) {
+          if (interactionBox.target.pick === FINITE) {
+            const newMap = JSON.parse(JSON.stringify(map));
+
+            newMap[interactionBox.pos[0]][interactionBox.pos[1]].content = "";
+
+            setMap(newMap);
+          }
+
+          setInteractionBox(initialInteractionBox);
+
+          break;
+        }
+
         if (
           walkerPosition.direction === DOWN &&
           walkerPosition.y < map[0].length - 1 &&
@@ -209,6 +277,7 @@ function Walker() {
             ...initialInteractionBox,
             target:
               MAP_ELEM[map[walkerPosition.x][walkerPosition.y + 1].content],
+            pos: [walkerPosition.x, walkerPosition.y + 1],
           });
 
         if (
@@ -220,17 +289,20 @@ function Walker() {
             ...initialInteractionBox,
             target:
               MAP_ELEM[map[walkerPosition.x][walkerPosition.y - 1].content],
+            pos: [walkerPosition.x, walkerPosition.y - 1],
           });
         if (
           walkerPosition.direction === RIGHT &&
           walkerPosition.x < map.length - 1 &&
           map[walkerPosition.x + 1][walkerPosition.y].content
-        )
+        ) {
           setInteractionBox({
             ...initialInteractionBox,
             target:
               MAP_ELEM[map[walkerPosition.x + 1][walkerPosition.y].content],
+            pos: [walkerPosition.x + 1, walkerPosition.y],
           });
+        }
         if (
           walkerPosition.direction === LEFT &&
           walkerPosition.x > 0 &&
@@ -240,6 +312,7 @@ function Walker() {
             ...initialInteractionBox,
             target:
               MAP_ELEM[map[walkerPosition.x - 1][walkerPosition.y].content],
+            pos: [walkerPosition.x - 1, walkerPosition.y],
           });
 
         break;
@@ -269,7 +342,11 @@ function Walker() {
           <div>direction = {walkerPosition.direction}</div>
 
           <div className="flex flex-col items-center sm:flex-row">
-            <div className="flex p-3 m-3 bg-blue-900">
+            <div
+              className={`flex p-3 m-3 bg-blue-900  ${
+                interactionBox.target && "opacity-50"
+              }  `}
+            >
               {map.map((e, i) => (
                 <div key={i} className=" text-center ">
                   {/* [x:{i}]{" "} */}
@@ -295,15 +372,18 @@ function Walker() {
                   <div>{backpack.gold} gold</div>
                   <div>
                     {backpack.items.map((i) => (
-                      <div key={i[1].code}>
-                        {i[0]} {i[1].name}
+                      <div key={i.item.code}>
+                        {i.qty} - {i.item.name} - [$ {i.item.price}]
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-
-              <div className="bg-sky-800 w-56 h-36 m-3 p-3">
+              <div
+                className={`bg-sky-800 w-56 h-36 m-3 p-3 border-2 border-sky-800 ${
+                  interactionBox.target && "border-2 border-sky-300"
+                }`}
+              >
                 <div className="font-bold text-center">*interaction box*</div>
                 <div>
                   {interactionBox.target && (
@@ -321,6 +401,9 @@ function Walker() {
                         <div>
                           {"> [action] - "} {interactionBox.target.interact}
                         </div>
+                      )}
+                      {interactionBox.target.pick && (
+                        <div>{"> [PICK] - x "}</div>
                       )}
                     </div>
                   )}
