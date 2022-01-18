@@ -60,6 +60,9 @@ export const RightMap = () => {
   return map;
 };
 
+//base map
+//generate random assets
+
 export const getMap = (coord) => {
   let map;
 

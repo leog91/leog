@@ -59,6 +59,19 @@ function Walker() {
     direction: RIGHT,
   });
 
+  const nextCell = () => {
+    switch (walkerPosition.direction) {
+      case RIGHT:
+        return [walkerPosition.x + 1, walkerPosition.y];
+      case LEFT:
+        return [walkerPosition.x - 1, walkerPosition.y];
+      case DOWN:
+        return [walkerPosition.x, walkerPosition.y + 1];
+      case UP:
+        return [walkerPosition.x, walkerPosition.y - 1];
+    }
+  };
+
   // const inventoryCodeMapping = (code) => interactionBox.target.i_code;
 
   useEffect(() => {
@@ -128,13 +141,51 @@ function Walker() {
     return () => window.removeEventListener("keydown", onKeyDown);
   });
 
-  const moveDown = () => {
-    if (walkerPosition.direction !== DOWN) {
-      setWalkerPosition({ ...walkerPosition, direction: DOWN });
+  const isMapLimit = () => {
+    switch (walkerPosition.direction) {
+      case DOWN:
+        return walkerPosition.y === map[0].length - 1;
+      case UP:
+        return walkerPosition.y === 0;
+      case RIGHT:
+        return walkerPosition.x === map.length - 1;
+      case LEFT:
+        return walkerPosition.x === 0;
+    }
+  };
+
+  const isBlockedPath = () => {
+    switch (walkerPosition.direction) {
+      case DOWN:
+        return (
+          map[walkerPosition.x][walkerPosition.y + 1].content ===
+          MAP_ELEM.WALL.code
+        );
+      case UP:
+        return (
+          map[walkerPosition.x][walkerPosition.y - 1].content ===
+          MAP_ELEM.WALL.code
+        );
+      case RIGHT:
+        return (
+          map[walkerPosition.x + 1][walkerPosition.y].content ===
+          MAP_ELEM.WALL.code
+        );
+      case LEFT:
+        return (
+          map[walkerPosition.x - 1][walkerPosition.y].content ===
+          MAP_ELEM.WALL.code
+        );
+    }
+  };
+
+  const move = (dir) => {
+    if (walkerPosition.direction !== dir) {
+      setWalkerPosition({ ...walkerPosition, direction: dir });
       return;
     }
 
-    if (map[walkerPosition.x][walkerPosition.y].passage?.direction === DOWN) {
+    if (map[walkerPosition.x][walkerPosition.y].passage?.direction === dir) {
       setMap(getMap(map[walkerPosition.x][walkerPosition.y].passage.map));
       setWalkerPosition({
         ...walkerPosition,
@@ -143,93 +194,16 @@ function Walker() {
       });
     }
 
-    if (
-      walkerPosition.y === map[0].length - 1 ||
-      map[walkerPosition.x][walkerPosition.y + 1].content === MAP_ELEM.WALL.code
-    ) {
+    if (isMapLimit() || isBlockedPath()) {
       return;
     }
 
-    walkerPosition.direction === DOWN &&
-      setWalkerPosition({ ...walkerPosition, y: walkerPosition.y + 1 });
-  };
-
-  const moveLeft = () => {
-    if (walkerPosition.direction !== LEFT) {
-      setWalkerPosition({ ...walkerPosition, direction: LEFT });
-      return;
-    }
-
-    if (map[walkerPosition.x][walkerPosition.y].passage?.direction === LEFT) {
-      setMap(getMap(map[walkerPosition.x][walkerPosition.y].passage.map));
+    walkerPosition.direction === dir &&
       setWalkerPosition({
         ...walkerPosition,
-        x: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[0],
-        y: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[1],
+        x: nextCell()[0],
+        y: nextCell()[1],
       });
-    }
-
-    if (
-      walkerPosition.x === 0 ||
-      map[walkerPosition.x - 1][walkerPosition.y].content === MAP_ELEM.WALL.code
-    ) {
-      return;
-    }
-
-    walkerPosition.direction === LEFT &&
-      setWalkerPosition({ ...walkerPosition, x: walkerPosition.x - 1 });
-  };
-
-  const moveRight = () => {
-    if (walkerPosition.direction !== RIGHT) {
-      setWalkerPosition({ ...walkerPosition, direction: RIGHT });
-      return;
-    }
-
-    if (map[walkerPosition.x][walkerPosition.y].passage?.direction === RIGHT) {
-      setMap(getMap(map[walkerPosition.x][walkerPosition.y].passage.map));
-      setWalkerPosition({
-        ...walkerPosition,
-        x: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[0],
-        y: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[1],
-      });
-    }
-
-    if (
-      walkerPosition.x === map.length - 1 ||
-      map[walkerPosition.x + 1][walkerPosition.y].content === MAP_ELEM.WALL.code
-    ) {
-      return;
-    }
-
-    walkerPosition.direction === RIGHT &&
-      setWalkerPosition({ ...walkerPosition, x: walkerPosition.x + 1 });
-  };
-
-  const moveUp = () => {
-    if (walkerPosition.direction !== UP) {
-      setWalkerPosition({ ...walkerPosition, direction: UP });
-      return;
-    }
-
-    if (map[walkerPosition.x][walkerPosition.y].passage?.direction === UP) {
-      setMap(getMap(map[walkerPosition.x][walkerPosition.y].passage.map));
-      setWalkerPosition({
-        direction: map[walkerPosition.x][walkerPosition.y].passage.direction,
-        x: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[0],
-        y: map[walkerPosition.x][walkerPosition.y].passage.walkerPosition[1],
-      });
-    }
-
-    if (
-      walkerPosition.y === 0 ||
-      map[walkerPosition.x][walkerPosition.y - 1].content === MAP_ELEM.WALL.code
-    ) {
-      return;
-    }
-
-    walkerPosition.direction === UP &&
-      setWalkerPosition({ ...walkerPosition, y: walkerPosition.y - 1 });
   };
 
   useEffect(() => {
@@ -239,16 +213,16 @@ function Walker() {
   const handler = (key) => {
     switch (key) {
       case "ArrowUp":
-        moveUp();
+        move(UP);
         break;
       case "ArrowRight":
-        moveRight();
+        move(RIGHT);
         break;
       case "ArrowLeft":
-        moveLeft();
+        move(LEFT);
         break;
       case "ArrowDown":
-        moveDown();
+        move(DOWN);
         break;
 
       case "x":
@@ -417,26 +391,26 @@ function Walker() {
               <div> </div>
 
               <div
-                onClick={() => moveUp()}
+                onClick={() => move(UP)}
                 className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
               >
                 ▲
               </div>
               <div> </div>
               <div
-                onClick={() => moveLeft()}
+                onClick={() => move(LEFT)}
                 className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
               >
                 ◄
               </div>
               <div
-                onClick={() => moveDown()}
+                onClick={() => move(DOWN)}
                 className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
               >
                 ▼
               </div>
               <div
-                onClick={() => moveRight()}
+                onClick={() => move(RIGHT)}
                 className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
               >
                 ►
