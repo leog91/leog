@@ -155,28 +155,8 @@ function Walker() {
   };
 
   const isBlockedPath = () => {
-    switch (walkerPosition.direction) {
-      case DOWN:
-        return (
-          map[walkerPosition.x][walkerPosition.y + 1].content ===
-          MAP_ELEM.WALL.code
-        );
-      case UP:
-        return (
-          map[walkerPosition.x][walkerPosition.y - 1].content ===
-          MAP_ELEM.WALL.code
-        );
-      case RIGHT:
-        return (
-          map[walkerPosition.x + 1][walkerPosition.y].content ===
-          MAP_ELEM.WALL.code
-        );
-      case LEFT:
-        return (
-          map[walkerPosition.x - 1][walkerPosition.y].content ===
-          MAP_ELEM.WALL.code
-        );
-    }
+    let [x, y] = nextCell();
+    return map[x][y].content === MAP_ELEM.WALL.code;
   };
 
   const move = (dir) => {
@@ -198,11 +178,12 @@ function Walker() {
       return;
     }
 
+    let [x, y] = nextCell();
     walkerPosition.direction === dir &&
       setWalkerPosition({
         ...walkerPosition,
-        x: nextCell()[0],
-        y: nextCell()[1],
+        x: x,
+        y: y,
       });
   };
 
@@ -226,9 +207,12 @@ function Walker() {
         break;
 
       case "x":
+        //add item
+
         if (interactionBox.target?.pick) {
           addToBackpack();
 
+          //
           if (interactionBox.target.pick === FINITE) {
             const newMap = JSON.parse(JSON.stringify(map));
 
@@ -242,51 +226,13 @@ function Walker() {
           break;
         }
 
-        if (
-          walkerPosition.direction === DOWN &&
-          walkerPosition.y < map[0].length - 1 &&
-          map[walkerPosition.x][walkerPosition.y + 1].content
-        )
-          setInteractionBox({
-            ...initialInteractionBox,
-            target:
-              MAP_ELEM[map[walkerPosition.x][walkerPosition.y + 1].content],
-            pos: [walkerPosition.x, walkerPosition.y + 1],
-          });
+        let [x, y] = nextCell();
 
-        if (
-          walkerPosition.direction === UP &&
-          walkerPosition.y > 0 &&
-          map[walkerPosition.x][walkerPosition.y - 1].content
-        )
+        if (!isMapLimit() && map[x][y].content)
           setInteractionBox({
             ...initialInteractionBox,
-            target:
-              MAP_ELEM[map[walkerPosition.x][walkerPosition.y - 1].content],
-            pos: [walkerPosition.x, walkerPosition.y - 1],
-          });
-        if (
-          walkerPosition.direction === RIGHT &&
-          walkerPosition.x < map.length - 1 &&
-          map[walkerPosition.x + 1][walkerPosition.y].content
-        ) {
-          setInteractionBox({
-            ...initialInteractionBox,
-            target:
-              MAP_ELEM[map[walkerPosition.x + 1][walkerPosition.y].content],
-            pos: [walkerPosition.x + 1, walkerPosition.y],
-          });
-        }
-        if (
-          walkerPosition.direction === LEFT &&
-          walkerPosition.x > 0 &&
-          map[walkerPosition.x - 1][walkerPosition.y].content
-        )
-          setInteractionBox({
-            ...initialInteractionBox,
-            target:
-              MAP_ELEM[map[walkerPosition.x - 1][walkerPosition.y].content],
-            pos: [walkerPosition.x - 1, walkerPosition.y],
+            target: MAP_ELEM[map[x][y].content],
+            pos: [x, y],
           });
 
         break;
