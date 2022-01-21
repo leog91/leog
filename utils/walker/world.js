@@ -21,6 +21,7 @@ export const initialMap = () => {
   map[3][3].content = MAP_ELEM.TREE.code;
 
   map[5][3].content = MAP_ELEM.MUSHROOM.code;
+  map[1][2].content = MAP_ELEM.CAULDRON.code;
 
   map[9][2].content = MAP_ELEM.WALL.code;
   map[9][3].content = MAP_ELEM.WALL.code;
