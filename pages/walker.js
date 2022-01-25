@@ -47,6 +47,8 @@ function Walker() {
     ],
   });
 
+  const [mode, setMode] = useState("map");
+
   const [map, setMap] = useState([[]]);
 
   const initialInteractionBox = { cursor: 0, target: null };
@@ -58,6 +60,8 @@ function Walker() {
     y: 0,
     direction: RIGHT,
   });
+
+  const [menuCursor, setMenuCursor] = useState(0);
 
   const nextCell = () => {
     switch (walkerPosition.direction) {
@@ -127,6 +131,8 @@ function Walker() {
     setBackpack({ ...backpack, items: newItems });
   };
 
+  const menu = ["Inventory", "exit"];
+
   useEffect(() => {
     const onKeyDown = (e) => {
       if (
@@ -187,11 +193,11 @@ function Walker() {
       });
   };
 
-  useEffect(() => {
-    setInteractionBox(initialInteractionBox);
-  }, [walkerPosition]);
+  const openMenu = () => {
+    setMode("menu");
+  };
 
-  const handler = (key) => {
+  const mapHandler = (key) => {
     switch (key) {
       case "ArrowUp":
         move(UP);
@@ -204,6 +210,10 @@ function Walker() {
         break;
       case "ArrowDown":
         move(DOWN);
+        break;
+
+      case "Enter":
+        openMenu();
         break;
 
       case "x":
@@ -228,33 +238,73 @@ function Walker() {
 
         let [x, y] = nextCell();
 
-        if (!isMapLimit() && map[x][y].content)
-          setInteractionBox({
-            ...initialInteractionBox,
-            target: MAP_ELEM[map[x][y].content],
-            pos: [x, y],
-          });
+        if (!isMapLimit() && map[x][y].content) {
+          if (
+            map[x][y].content === MAP_ELEM.CAULDRON.code ||
+            map[x][y].content === MAP_ELEM.TRADER.code
+          ) {
+            setMode("craft");
+          } else {
+            setInteractionBox({
+              ...initialInteractionBox,
+              target: MAP_ELEM[map[x][y].content],
+              pos: [x, y],
+            });
+          }
+        }
 
         break;
 
-      case "z":
-        setInteractionBox(initialInteractionBox);
-        break;
       default:
         console.log("key", key);
         break;
     }
   };
 
+  const menuHandler = (key) => {
+    if (key === "ArrowUp") {
+      setMenuCursor(menuCursor === 0 ? 0 : menuCursor - 1);
+    }
+
+    if (key === "ArrowDown") {
+      setMenuCursor(
+        menuCursor === menu.length - 1 ? menu.length - 1 : menuCursor + 1
+      );
+    }
+  };
+
+  useEffect(() => {
+    setInteractionBox(initialInteractionBox);
+  }, [walkerPosition]);
+
+  const handler = (key) => {
+    if (key === "z") {
+      setMode("map");
+      setInteractionBox(initialInteractionBox);
+      setMenuCursor(0);
+      return;
+    }
+
+    if (mode === "map") {
+      mapHandler(key);
+    }
+    if (mode === "craft") {
+      console.log("craft mode");
+    }
+    if (mode === "menu") {
+      menuHandler(key);
+    }
+  };
+
   return (
     <>
       <div
-        className="bg-blue-800 h-screen"
+        className="h-screen bg-blue-800"
         tabIndex="0"
         onKeyDown={(e) => handler(e.key)}
       >
-        <div className="   flex flex-col bg-blue-800  text-green-300 font-semibold place-items-center  ">
-          <div className="text-4xl   mb-8">Walker</div>
+        <div className="flex flex-col place-items-center  bg-blue-800 font-semibold text-green-300">
+          <div className="mb-8   text-4xl">Walker</div>
 
           <div>
             currentPos = x:{walkerPosition.x} / y:{walkerPosition.y}
@@ -263,12 +313,12 @@ function Walker() {
 
           <div className="flex flex-col items-center sm:flex-row">
             <div
-              className={`flex p-3 m-3 bg-blue-900  ${
-                interactionBox.target && "opacity-50"
+              className={`m-3 flex bg-blue-900 p-3  ${
+                (interactionBox.target || mode !== "map") && "opacity-50"
               }  `}
             >
               {map.map((e, i) => (
-                <div key={i} className=" text-center ">
+                <div key={i} className="text-center">
                   {/* [x:{i}]{" "} */}
                   {e.map((j, iy) => (
                     <MapCel
@@ -287,7 +337,7 @@ function Walker() {
 
             <div>
               <div className="">
-                <div className="font-bold text-center">Inventory</div>
+                <div className="text-center font-bold">Inventory</div>
                 <div className="pl-6">
                   <div>{backpack.gold} gold</div>
                   <div>
@@ -300,84 +350,112 @@ function Walker() {
                 </div>
               </div>
               <div
-                className={`bg-sky-800 w-56 h-36 m-3 p-3 border-2 border-sky-800 ${
+                className={`m-3 h-36 w-56 border-2 border-sky-800 bg-sky-800 p-3 ${
                   interactionBox.target && "border-2 border-sky-300"
                 }`}
               >
-                <div className="font-bold text-center">*interaction box*</div>
-                <div>
-                  {interactionBox.target && (
+                {mode === "map" && (
+                  <div>
+                    {" "}
+                    <div className="text-center font-bold">
+                      *interaction box*
+                    </div>
                     <div>
-                      {" "}
-                      <div>
-                        {">"} {interactionBox.target.code}
-                      </div>
-                      {interactionBox.target.desc && (
+                      {interactionBox.target && (
                         <div>
-                          {">"} {interactionBox.target.desc}{" "}
+                          {" "}
+                          <div>
+                            {">"} {interactionBox.target.code}
+                          </div>
+                          {interactionBox.target.desc && (
+                            <div>
+                              {">"} {interactionBox.target.desc}{" "}
+                            </div>
+                          )}
+                          {interactionBox.target.interact && (
+                            <div>
+                              {"> [action] - "} {interactionBox.target.interact}
+                            </div>
+                          )}
+                          {interactionBox.target.pick && (
+                            <div>{"> [PICK] - x "}</div>
+                          )}
                         </div>
-                      )}
-                      {interactionBox.target.interact && (
-                        <div>
-                          {"> [action] - "} {interactionBox.target.interact}
-                        </div>
-                      )}
-                      {interactionBox.target.pick && (
-                        <div>{"> [PICK] - x "}</div>
                       )}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
+
+                {mode === "craft" && (
+                  <div>
+                    <div>crafting</div>
+
+                    <div>z - exit</div>
+                  </div>
+                )}
+                {mode === "menu" && (
+                  <div>
+                    <div className="text-center">menu</div>
+
+                    {menu.map((e, i) => (
+                      <div className="flex" key={e}>
+                        {" "}
+                        <div className="w-5">{i === menuCursor && ">"}</div>
+                        {e}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="flex ">
-            <div className="grid grid-cols-3 text-center text-2xl content-center m-6">
+          <div className="flex">
+            <div className="m-6 grid grid-cols-3 content-center text-center text-2xl">
               <div> </div>
 
               <div
                 onClick={() => move(UP)}
-                className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
+                className="m-1 flex h-14 w-14 items-center justify-center rounded-md bg-slate-400 hover:bg-slate-200 hover:text-black"
               >
                 ▲
               </div>
               <div> </div>
               <div
                 onClick={() => move(LEFT)}
-                className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
+                className="m-1 flex h-14 w-14 items-center justify-center rounded-md bg-slate-400 hover:bg-slate-200 hover:text-black"
               >
                 ◄
               </div>
               <div
                 onClick={() => move(DOWN)}
-                className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
+                className="m-1 flex h-14 w-14 items-center justify-center rounded-md bg-slate-400 hover:bg-slate-200 hover:text-black"
               >
                 ▼
               </div>
               <div
                 onClick={() => move(RIGHT)}
-                className="flex rounded-md justify-center items-center bg-slate-400 w-14 h-14 m-1 hover:bg-slate-200 hover:text-black"
+                className="m-1 flex h-14 w-14 items-center justify-center rounded-md bg-slate-400 hover:bg-slate-200 hover:text-black"
               >
                 ►
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row bg-blue-500 items-center   rounded-3xl m-6">
+            <div className="m-6 flex flex-col items-center rounded-3xl   bg-blue-500 sm:flex-row">
               <div className="flex flex-col items-center">
                 <div>press z</div>
                 <button
                   onClick={() => handler("z")}
-                  className="rounded-full m-2 w-16 h-16 bg-blue-900 font-black text-lg"
+                  className="m-2 h-16 w-16 rounded-full bg-blue-900 text-lg font-black"
                 >
                   z
                 </button>
               </div>
               <div className="flex flex-col items-center">
-                <div>press z</div>
+                <div>press x</div>
                 <button
                   onClick={() => handler("x")}
-                  className="rounded-full m-2 w-16 h-16 bg-blue-900 font-black text-lg"
+                  className="m-2 h-16 w-16 rounded-full bg-blue-900 text-lg font-black"
                 >
                   x
                 </button>

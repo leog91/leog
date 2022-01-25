@@ -6,10 +6,34 @@ export const DOWN = "DOWN";
 export const FINITE = "FINITE";
 export const INFINITE = "INFINITE";
 
+export const ACTION = {
+  PICK: { FINITE, INFINITE },
+  CRAFT: "cauldron",
+  SELL: "sell",
+};
+
 export const INV_ELEM = {
   MUSHROOM: { desc: "power up", code: "I_M", name: "mushroom", price: 3 },
   WATER: { desc: "fresh", code: "I_W", name: "water", price: 1 },
   WOOD: { desc: "brownish", code: "I_WO", name: "wood", price: 2 },
+  MUSHROOM_SOUP: {
+    desc: "liquid",
+    code: "I_MS",
+    name: "mushroomSoup",
+    price: 6,
+  },
+  CHAIR: { desc: "4 legs", code: "I_C", name: "chair", price: 12 },
+};
+
+export const recipes = {
+  MUSHROOM_SOUP: {
+    ingridients: [
+      [INV_ELEM.MUSHROOM.code, 2],
+      [INV_ELEM.WATER.code, 1],
+    ],
+    create: INV_ELEM.MUSHROOM_SOUP.code,
+  },
+  CHAIR: [[INV_ELEM.WOOD.code, 3]],
 };
 
 export const getInvFromCode = (code = "I_W") => {
@@ -59,6 +83,7 @@ export const MAP_ELEM = {
     desc: "smells bad",
     interact: "throw things",
     code: "CAULDRON",
+    action: ACTION.CRAFT,
     img: "/walker/icons/cauldron.svg",
   },
   WELL: {
@@ -72,6 +97,7 @@ export const MAP_ELEM = {
   TRADER: {
     desc: "looks rich",
     interact: "buy & sell",
+    action: ACTION.SELL,
     code: "TRADER",
     img: "/walker/icons/vendor.svg",
   },
