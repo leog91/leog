@@ -261,16 +261,47 @@ function Walker() {
     }
   };
 
-  const menuHandler = (key) => {
+  const cursorHandler = (key) => {
+    const cursorLength =
+      mode === "menu"
+        ? menu.length
+        : mode === "inventory"
+        ? backpack.items.length
+        : 0;
+
     if (key === "ArrowUp") {
       setMenuCursor(menuCursor === 0 ? 0 : menuCursor - 1);
     }
 
     if (key === "ArrowDown") {
       setMenuCursor(
-        menuCursor === menu.length - 1 ? menu.length - 1 : menuCursor + 1
+        menuCursor === cursorLength - 1 ? menu.length - 1 : menuCursor + 1
       );
     }
+  };
+
+  const menuHandler = (key) => {
+    cursorHandler(key);
+
+    if (key === "x") {
+      if (menu.indexOf("Inventory") === menuCursor) {
+        setMode("inventory");
+        setMenuCursor(0);
+      }
+      if (menu.indexOf("exit") === menuCursor) {
+        initialState();
+      }
+    }
+  };
+
+  const inventoryHandler = (key) => {
+    cursorHandler(key);
+  };
+
+  const initialState = () => {
+    setMode("map");
+    setInteractionBox(initialInteractionBox);
+    setMenuCursor(0);
   };
 
   useEffect(() => {
@@ -279,21 +310,17 @@ function Walker() {
 
   const handler = (key) => {
     if (key === "z") {
-      setMode("map");
-      setInteractionBox(initialInteractionBox);
-      setMenuCursor(0);
+      initialState();
       return;
     }
 
-    if (mode === "map") {
-      mapHandler(key);
-    }
-    if (mode === "craft") {
-      console.log("craft mode");
-    }
-    if (mode === "menu") {
-      menuHandler(key);
-    }
+    mode === "map" && mapHandler(key);
+
+    mode === "craft" && console.log(`craft mode ${key}`);
+
+    mode === "menu" && menuHandler(key);
+
+    mode === "inventory" && inventoryHandler(key);
   };
 
   return (
@@ -319,7 +346,6 @@ function Walker() {
             >
               {map.map((e, i) => (
                 <div key={i} className="text-center">
-                  {/* [x:{i}]{" "} */}
                   {e.map((j, iy) => (
                     <MapCel
                       key={j.id}
@@ -337,16 +363,9 @@ function Walker() {
 
             <div>
               <div className="">
-                <div className="text-center font-bold">Inventory</div>
+                <div className="text-center font-bold">Stats</div>
                 <div className="pl-6">
                   <div>{backpack.gold} gold</div>
-                  <div>
-                    {backpack.items.map((i) => (
-                      <div key={i.item.code}>
-                        {i.qty} - {i.item.name} - [$ {i.item.price}]
-                      </div>
-                    ))}
-                  </div>
                 </div>
               </div>
               <div
@@ -406,6 +425,20 @@ function Walker() {
                     ))}
                   </div>
                 )}
+                {mode === "inventory" && (
+                  <div>
+                    <div className="text-center">Inventory</div>
+
+                    {backpack.items.map((e, i) => (
+                      <div className="flex" key={e.item.code}>
+                        {" "}
+                        <div className="w-5">{i === menuCursor && ">"}</div>
+                        {e.qty} - {e.item.name} - [$ {e.item.price}]
+                        {/* {e.item.name} */}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -443,7 +476,6 @@ function Walker() {
 
             <div className="m-6 flex flex-col items-center rounded-3xl   bg-blue-500 sm:flex-row">
               <div className="flex flex-col items-center">
-                <div>press z</div>
                 <button
                   onClick={() => handler("z")}
                   className="m-2 h-16 w-16 rounded-full bg-blue-900 text-lg font-black"
@@ -452,12 +484,20 @@ function Walker() {
                 </button>
               </div>
               <div className="flex flex-col items-center">
-                <div>press x</div>
                 <button
                   onClick={() => handler("x")}
                   className="m-2 h-16 w-16 rounded-full bg-blue-900 text-lg font-black"
                 >
                   x
+                </button>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <button
+                  onClick={() => handler("Enter")}
+                  className="m-2 h-16 w-16 rounded-full bg-blue-900 text-lg font-black"
+                >
+                  ↵
                 </button>
               </div>
             </div>
