@@ -2,4 +2,54 @@
 @tailwind base;
 @tailwind components;
 /* purgecss end ignore */
+
+/* This will always be included in your compiled CSS */
+
+@layer components {
+  /* This won't be included in your compiled CSS unless you actually use it */
+  @keyframes mymove {
+    from {
+      transform: rotate(-20deg);
+    }
+    to {
+      transform: rotate(20deg);
+    }
+  }
+  .card {
+    background-color: red;
+    width: 30px;
+    height: 115px;
+
+    animation: mymove 1s infinite;
+    animation-direction: alternate;
+
+    animation-timing-function: linear;
+  }
+
+  @keyframes circleBounce {
+    from {
+      transform: rotate(-90deg);
+      transform: translateX(10px);
+      background-color: blue;
+    }
+    to {
+      transform: rotate(60deg);
+      /* transform: translateX(100px); */
+      transform: translateX(200px);
+    }
+  }
+
+  .circle {
+    width: 100px;
+    transform: translateX(200px);
+    height: 100px;
+    background-color: lime;
+    border-radius: 9999px;
+
+    animation: circleBounce 1s;
+    animation-direction: alternate;
+    animation-timing-function: linear;
+  }
+}
+
 @tailwind utilities;

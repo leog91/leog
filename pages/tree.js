@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Badge } from "../components/atomic/Badge";
+import Card from "../components/card";
+import PokeCard from "../components/pokeCard";
 //remove
 import archer from "../public/age/4.png";
 
@@ -9,7 +11,7 @@ const Elem = ({ c, i, setTooltip }) => {
     <div
       onMouseOver={() => setTooltip(c.name)}
       onMouseLeave={() => setTooltip(null)}
-      className="m-1 w-32 h-8"
+      className="m-1 h-8 w-32"
     >
       {c.name} {c.pos} index{i}
     </div>
@@ -141,13 +143,18 @@ const Tree = () => {
           </div>
         ))}
       </div>
-      <div className="flex m-auto mt-8 justify-center  rounded-full items-center w-28 h-12 bg-red-500  ">
+      <div className="m-auto mt-8 flex h-12  w-28 items-center justify-center rounded-full bg-red-500  ">
         {tooltip && (
-          <div className="bg-red-300 px-3 py-1 rounded-full"> {tooltip}</div>
+          <div className="rounded-full bg-red-300 px-3 py-1"> {tooltip}</div>
         )}
       </div>
       from end to start, linear?, quad?, mid point ,
-      <div className="m-4 w-24 h-24">
+      <div className=" circle flex cursor-pointer items-center"> circle?</div>
+      <div className="m-6 flex justify-center space-x-4 bg-slate-400 p-4">
+        <Card />
+        <PokeCard />
+      </div>
+      <div className="m-4 h-24 w-24">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <polyline stroke="black" fill="none" points={`0,0 100,100`} />
         </svg>

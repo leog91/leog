@@ -8,37 +8,12 @@ import {
   MAP_ELEM,
   INV_ELEM,
   FINITE,
-  getInvFromCode,
+  recipes,
 } from "../constants/walker";
+import { nextCell, addToBackpack } from "../utils/walker/mapInteraction";
 import { initialMap, getMap } from "../utils/walker/world";
 
-//mobile
-// ..
-//move-constants
-
-//constanst
-// const checkUniqueCode = () => true
-
-//check descriptions
-
-// canPick, water?, terrain Bg, pick fruit, drink water,
-
-const canPick = [MAP_ELEM.MUSHROOM];
-
 function Walker() {
-  //check keys, idx(ixiy)
-
-  // render mode
-  // center(zelda, pokemon)
-  // clasic (chess)
-  // build world (world)/ randomize, vanilla
-  //last 10 steps/timemachine/ undo
-  //walk-transition animation
-  //on key press
-  // next map
-
-  // check keys
-
   const [backpack, setBackpack] = useState({
     gold: 2,
     items: [
@@ -46,6 +21,8 @@ function Walker() {
       { item: INV_ELEM.MUSHROOM, qty: 1 },
     ],
   });
+
+  const [time, setTime] = useState(0);
 
   const [mode, setMode] = useState("map");
 
@@ -63,73 +40,12 @@ function Walker() {
 
   const [menuCursor, setMenuCursor] = useState(0);
 
-  const nextCell = () => {
-    switch (walkerPosition.direction) {
-      case RIGHT:
-        return [walkerPosition.x + 1, walkerPosition.y];
-      case LEFT:
-        return [walkerPosition.x - 1, walkerPosition.y];
-      case DOWN:
-        return [walkerPosition.x, walkerPosition.y + 1];
-      case UP:
-        return [walkerPosition.x, walkerPosition.y - 1];
-    }
-  };
-
-  // const inventoryCodeMapping = (code) => interactionBox.target.i_code;
-
   useEffect(() => {
     const newMap = [...initialMap()];
     setMap(newMap);
   }, []);
 
   useEffect(() => {}, [walkerPosition]);
-
-  const addToBackpack = () => {
-    let item = backpack.items.find(
-      (i) => i.item.code === interactionBox.target.i_code
-    );
-
-    if (item) {
-      item.qty = item.qty + 1;
-    } else {
-      item = {};
-      item.item = getInvFromCode(interactionBox.target.i_code);
-      item.qty = 1;
-    }
-
-    setBackpack({
-      ...backpack,
-      items: [
-        ...backpack.items.filter(
-          (i) => i.item.code !== interactionBox.target.i_code
-        ),
-        item,
-      ],
-    });
-  };
-
-  //parameter?
-  //update
-  const removeFromBackpack = () => {
-    console.log("addtoback =>>");
-
-    let newItems = { ...backpack.items };
-
-    const i_code = inventoryCodeMapping(interactionBox.target.code);
-
-    //remove logic
-    if (backpack.items[i_code] > 1) {
-      newItems[i_code] = newItems[i_code] - 1;
-
-      console.log("removing on >1");
-    } else {
-      console.log(newItems, "full items");
-      delete newItems[i_code];
-      console.log(newItems, "newwwwitems");
-    }
-    setBackpack({ ...backpack, items: newItems });
-  };
 
   const menu = ["Inventory", "exit"];
 
@@ -161,7 +77,7 @@ function Walker() {
   };
 
   const isBlockedPath = () => {
-    let [x, y] = nextCell();
+    let [x, y] = nextCell(walkerPosition);
     return map[x][y].content === MAP_ELEM.WALL.code;
   };
 
@@ -184,7 +100,9 @@ function Walker() {
       return;
     }
 
-    let [x, y] = nextCell();
+    let [x, y] = nextCell(walkerPosition);
+
+    setTime(time + 1);
     walkerPosition.direction === dir &&
       setWalkerPosition({
         ...walkerPosition,
@@ -220,7 +138,7 @@ function Walker() {
         //add item
 
         if (interactionBox.target?.pick) {
-          addToBackpack();
+          addToBackpack(backpack, interactionBox, setBackpack);
 
           //
           if (interactionBox.target.pick === FINITE) {
@@ -236,7 +154,7 @@ function Walker() {
           break;
         }
 
-        let [x, y] = nextCell();
+        let [x, y] = nextCell(walkerPosition);
 
         if (!isMapLimit() && map[x][y].content) {
           if (
@@ -267,6 +185,8 @@ function Walker() {
         ? menu.length
         : mode === "inventory"
         ? backpack.items.length
+        : mode === "craft"
+        ? recipes.length
         : 0;
 
     if (key === "ArrowUp") {
@@ -275,7 +195,7 @@ function Walker() {
 
     if (key === "ArrowDown") {
       setMenuCursor(
-        menuCursor === cursorLength - 1 ? menu.length - 1 : menuCursor + 1
+        menuCursor === cursorLength - 1 ? menuCursor : menuCursor + 1
       );
     }
   };
@@ -298,6 +218,28 @@ function Walker() {
     cursorHandler(key);
   };
 
+  const craftHandler = (key) => {
+    console.log("craft");
+    cursorHandler(key);
+
+    if (key === "x") {
+      if (
+        recipes.findIndex(
+          (r) => r.create.code === INV_ELEM.MUSHROOM_SOUP.code
+        ) === menuCursor
+      ) {
+        console.log("soooup");
+      }
+
+      if (
+        recipes.findIndex((r) => r.create.code === INV_ELEM.HOT_WATER.code) ===
+        menuCursor
+      ) {
+        console.log("hotWatr");
+      }
+    }
+  };
+
   const initialState = () => {
     setMode("map");
     setInteractionBox(initialInteractionBox);
@@ -316,7 +258,7 @@ function Walker() {
 
     mode === "map" && mapHandler(key);
 
-    mode === "craft" && console.log(`craft mode ${key}`);
+    mode === "craft" && craftHandler(key);
 
     mode === "menu" && menuHandler(key);
 
@@ -332,6 +274,8 @@ function Walker() {
       >
         <div className="flex flex-col place-items-center  bg-blue-800 font-semibold text-green-300">
           <div className="mb-8   text-4xl">Walker</div>
+
+          <div>time = {time}</div>
 
           <div>
             currentPos = x:{walkerPosition.x} / y:{walkerPosition.y}
@@ -407,9 +351,15 @@ function Walker() {
 
                 {mode === "craft" && (
                   <div>
-                    <div>crafting</div>
+                    <div className="text-center">crafting</div>
 
-                    <div>z - exit</div>
+                    {recipes.map((e, i) => (
+                      <div className="flex" key={e.create.code}>
+                        {" "}
+                        <div className="w-5">{i === menuCursor && ">"}</div>
+                        {e.create.name}
+                      </div>
+                    ))}
                   </div>
                 )}
                 {mode === "menu" && (

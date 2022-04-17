@@ -19,22 +19,46 @@ export const INV_ELEM = {
   MUSHROOM_SOUP: {
     desc: "liquid",
     code: "I_MS",
-    name: "mushroomSoup",
+    name: "Mushroom Soup",
     price: 6,
   },
-  CHAIR: { desc: "4 legs", code: "I_C", name: "chair", price: 12 },
+  HOT_WATER: {
+    desc: "liquidH",
+    code: "H_W",
+    name: "Hot Water",
+    price: 2,
+  },
+  CHAIR: { desc: "4 legs", code: "I_C", name: "Chair", price: 12 },
 };
 
-export const recipes = {
-  MUSHROOM_SOUP: {
-    ingridients: [
-      [INV_ELEM.MUSHROOM.code, 2],
-      [INV_ELEM.WATER.code, 1],
+// export const recipes = {
+//   MUSHROOM_SOUP: {
+//     ingridients: [
+//       [INV_ELEM.MUSHROOM.code, 2],
+//       [INV_ELEM.WATER.code, 1],
+//     ],
+//     create: INV_ELEM.MUSHROOM_SOUP.code,
+//   },
+//   CHAIR: [[INV_ELEM.WOOD.code, 3]],
+// };
+
+export const recipes = [
+  {
+    create: INV_ELEM.MUSHROOM_SOUP,
+    require: [
+      { item: INV_ELEM.MUSHROOM, qty: 1 },
+      { item: INV_ELEM.WATER, qty: 2 },
     ],
-    create: INV_ELEM.MUSHROOM_SOUP.code,
   },
-  CHAIR: [[INV_ELEM.WOOD.code, 3]],
-};
+  {
+    create: INV_ELEM.HOT_WATER,
+    require: [{ item: INV_ELEM.WATER, qty: 1 }],
+  },
+  {
+    create: INV_ELEM.CHAIR,
+    require: [{ item: INV_ELEM.WOOD, qty: 3 }],
+  },
+];
 
 export const getInvFromCode = (code = "I_W") => {
   let elem;

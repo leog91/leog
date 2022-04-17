@@ -1,0 +1,30 @@
+.test{
+ background-color: darkslateblue;
+ padding: 10px;
+ margin: 25px;
+ border-width: 5px;
+ border-color: violet;
+
+
+
+}
+
+
+@keyframes grow {
+    from {transform: scale(1)
+    }
+    to{
+        transform: scale(1.5);
+    }
+    
+}
+
+
+
+.test:hover{
+    animation: grow 0.5s infinite;
+    animation-direction: alternate;
+    animation-timing-function: linear;
+    animation-delay: 100ms;
+
+}
