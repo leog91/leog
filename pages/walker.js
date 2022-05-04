@@ -9,6 +9,7 @@ import {
   INV_ELEM,
   FINITE,
   recipes,
+  getInvFromCode,
 } from "../constants/walker";
 import { nextCell, addToBackpack } from "../utils/walker/mapInteraction";
 import { initialMap, getMap } from "../utils/walker/world";
@@ -27,6 +28,8 @@ function Walker() {
   const [mode, setMode] = useState("map");
 
   const [map, setMap] = useState([[]]);
+
+  const [payload, setPayload] = useState(null);
 
   const initialInteractionBox = { cursor: 0, target: null };
 
@@ -79,6 +82,71 @@ function Walker() {
   const isBlockedPath = () => {
     let [x, y] = nextCell(walkerPosition);
     return map[x][y].content === MAP_ELEM.WALL.code;
+  };
+
+  const removeFromBackpack = (code, qty) => {
+    const item = backpack.items.find((i) => i.item.code === code);
+
+    if (item.qty > qty) {
+      item.qty = item.qty - qty;
+
+      setBackpack((prev) => {
+        return {
+          ...prev,
+          items: [
+            ...prev.items.filter((i) => i.item.code !== item.item.code),
+            item,
+          ],
+        };
+      });
+    } else {
+      setBackpack((prev) => {
+        return {
+          ...prev,
+          items: [...prev.items.filter((i) => i.item.code !== item.item.code)],
+        };
+      });
+    }
+  };
+
+  //merge with pick add backpack
+  const craft = () => {
+    //to-do-rename & params
+    const checkInBackpack = (code, qty) =>
+      backpack.items.find((i) => i.item.code === code && i.qty >= qty);
+
+    const canCraft = () =>
+      payload.require.filter(
+        (r) => r.item.code === checkInBackpack(r.item.code, r.qty)?.item.code
+      ).length === payload.require.length;
+
+    if (canCraft()) {
+      let item = backpack.items.find(
+        (i) => i.item.code === payload.create.code
+      );
+
+      if (item) {
+        item.qty = item.qty + 1;
+      } else {
+        item = {};
+        item.item = getInvFromCode(payload.create.code);
+        item.qty = 1;
+      }
+
+      payload.require.forEach((r) => {
+        removeFromBackpack(r.item.code, r.qty);
+      });
+
+      setBackpack((prev) => {
+        return {
+          ...prev,
+          items: [
+            ...prev.items.filter((i) => i.item.code !== payload.create.code),
+            item,
+          ],
+        };
+      });
+    }
   };
 
   const move = (dir) => {
@@ -218,25 +286,19 @@ function Walker() {
     cursorHandler(key);
   };
 
+  const requireHandler = (key) => {
+    cursorHandler(key);
+    if (key === "x") {
+      craft();
+    }
+  };
+
   const craftHandler = (key) => {
-    console.log("craft");
     cursorHandler(key);
 
     if (key === "x") {
-      if (
-        recipes.findIndex(
-          (r) => r.create.code === INV_ELEM.MUSHROOM_SOUP.code
-        ) === menuCursor
-      ) {
-        console.log("soooup");
-      }
-
-      if (
-        recipes.findIndex((r) => r.create.code === INV_ELEM.HOT_WATER.code) ===
-        menuCursor
-      ) {
-        console.log("hotWatr");
-      }
+      setPayload(recipes[menuCursor]);
+      setMode("require");
     }
   };
 
@@ -250,8 +312,18 @@ function Walker() {
     setInteractionBox(initialInteractionBox);
   }, [walkerPosition]);
 
+  const backpackStock = (code) => {
+    const stock = backpack.items.find((i) => i.item.code === code)?.qty;
+    return stock ? stock : 0;
+  };
+
   const handler = (key) => {
     if (key === "z") {
+      if (mode === "require") {
+        setMode("craft");
+
+        return;
+      }
       initialState();
       return;
     }
@@ -263,6 +335,8 @@ function Walker() {
     mode === "menu" && menuHandler(key);
 
     mode === "inventory" && inventoryHandler(key);
+
+    mode === "require" && requireHandler(key);
   };
 
   return (
@@ -360,6 +434,30 @@ function Walker() {
                         {e.create.name}
                       </div>
                     ))}
+                  </div>
+                )}
+
+                {mode === "require" && (
+                  <div>
+                    <div className="text-center">require</div>
+
+                    {payload &&
+                      payload.require.map((e, i) => (
+                        <div className="flex justify-between" key={e.item.code}>
+                          {" "}
+                          {/* <div className="w-5">{i === menuCursor && ">"}</div> */}
+                          {e.item.name}
+                          <div
+                            className={`${
+                              backpackStock(e.item.code) < e.qty &&
+                              "text-red-700"
+                            }`}
+                          >
+                            {backpackStock(e.item.code)}/{e.qty}
+                          </div>
+                        </div>
+                      ))}
+                    <div className="">craft[x]</div>
                   </div>
                 )}
                 {mode === "menu" && (
