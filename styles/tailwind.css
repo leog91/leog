@@ -39,6 +39,12 @@
     }
   }
 
+.verticalText {
+  writing-mode: vertical-rl;
+    text-orientation: upright;
+    
+}
+  
   .circle {
     width: 100px;
     transform: translateX(200px);

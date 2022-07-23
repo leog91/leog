@@ -22,6 +22,8 @@
 
 ## Actions
 
+- go to previous menu (z)
+
 - Interact (default)
 
 - canPick
