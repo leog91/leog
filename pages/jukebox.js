@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom"; //???update
 
-const T = { ALBUM: "ALBUM", SONG: "SONG", LIVE: "LIVE", ANALOG: "ANALOG" };
+const T = {
+  ALBUM: "ALBUM",
+  SONG: "SONG",
+  LIVE: "LIVE",
+  ANALOG: "ANALOG",
+  RADIO: "RADIO",
+  VIDEO: "VIDEO",
+};
 
 // "https://www.youtube-nocookie.com/embed/"
 // "https://www.youtube.com/embed/
@@ -32,6 +39,24 @@ const musicList = [
     title: "UK Jazz and Groove with Tina Edwards",
     tags: [T.ANALOG],
   },
+
+  {
+    src: "mQGJ9FQC2Hw",
+    title:
+      "Dream Sounds | Poolside Disco Deep & Lofi House Mix | Tom Jarney, Lemin, Folamour",
+    tags: [T.ALBUM],
+  },
+  {
+    src: "zw79RVnlCb0",
+    title: "Hellraiser (30th Anniversary Edition - Official Animated Video)",
+    tags: [T.VIDEO],
+  },
+  {
+    src: "DgkgGbJwRyo",
+    title: "Crooked Colours - Flow [Official Video]",
+    tags: [T.VIDEO],
+  },
+
   ,
 ];
 
@@ -52,11 +77,10 @@ const Radio = () => {
 
   return (
     <>
-      radio - alpha
       {/* channge, to singleton, only 1 player */}
       {radioList.map((r) => (
         <div
-          className="my-1 flex cursor-pointer justify-between bg-slate-600  px-2"
+          className="my-1 flex w-full cursor-pointer justify-between bg-slate-600  px-2"
           onClick={() => {
             setTuned(null);
             setTimeout(() => {
@@ -71,9 +95,9 @@ const Radio = () => {
           {r.name}
         </div>
       ))}
-      <div>player</div>
+      {/* <div>player</div> */}
       {tuned && (
-        <div>
+        <div className=" flex w-full flex-col items-center ">
           <CustomIframe title="A custom made iframe">
             <p
               style={{
@@ -85,15 +109,20 @@ const Radio = () => {
             >
               {tuned.name}
             </p>
-            <audio style={{ width: "286px" }} controls autoPlay>
+            <audio style={{ width: "100%" }} controls autoPlay>
               {tuned.src.map((url, i) => (
                 <source key={url + i} src={url} type="audio/mpeg" />
               ))}
             </audio>
           </CustomIframe>
+          <button
+            className="-mt-5  w-24 border-2 border-slate-400 bg-slate-800 p-2 text-slate-300 hover:border-slate-200 hover:text-slate-100"
+            onClick={() => setTuned(null)}
+          >
+            Clear{" "}
+          </button>
         </div>
       )}
-      <button onClick={() => setTuned(null)}>clear </button>
     </>
   );
 };
@@ -106,19 +135,28 @@ const CustomIframe = ({ children, ...props }) => {
   const mountNode = contentRef?.contentWindow?.document?.body;
 
   return (
-    <iframe scrolling="no" className="m-0 w-80" {...props} ref={setContentRef}>
+    <iframe
+      scrolling="no"
+      className=" -mr-2 w-full"
+      {...props}
+      ref={setContentRef}
+    >
       {mountNode && createPortal(children, mountNode)}
     </iframe>
   );
 };
 
-function Jukebox() {
+const Youtube = () => {
   const [selected, setSelected] = useState(null);
   const [currentFilter, setCurrentFilter] = useState([]);
 
   const handleRandom = () => {
-    const random = Math.floor(Math.random() * musicList.length);
-    setSelected(musicList[random]);
+    // const random = Math.floor(Math.random() * musicList.length);
+
+    const random = Math.floor(Math.random() * filteredList().length);
+    //random with filter
+
+    setSelected(filteredList()[random]);
   };
 
   const addFilter = (tag) => {
@@ -127,6 +165,7 @@ function Jukebox() {
       : setCurrentFilter([...currentFilter, tag]);
   };
 
+  //usememo
   const filteredList = () => {
     return musicList.filter((m) =>
       currentFilter.every((f) => m.tags.includes(f))
@@ -134,89 +173,143 @@ function Jukebox() {
   };
 
   // checkDuplicate
+  return (
+    <>
+      <div className=" m-2 space-x-2">
+        <button
+          className="border-2 border-slate-400 bg-slate-800 p-2 text-slate-300 hover:border-slate-200 hover:text-slate-100"
+          onClick={() => handleRandom()}
+        >
+          Random
+        </button>
+
+        {/* <button
+          className="border-2 border-slate-400 bg-slate-800 p-2 text-slate-300 hover:border-slate-200 hover:text-slate-100"
+          onClick={() => console.log("todo")}
+        >
+          Autoplay
+        </button> */}
+
+        <button
+          onClick={() => setSelected(null)}
+          className={` border-2  border-slate-400 p-2  ${
+            selected
+              ? " bg-slate-800 hover:border-slate-200 hover:text-slate-100"
+              : " bg-slate-500 text-slate-300"
+          }`}
+          disabled={!selected}
+        >
+          Clear
+        </button>
+      </div>
+
+      <div className="flex flex-wrap justify-center">
+        {playListType().map((tag) => {
+          return (
+            <button
+              key={tag}
+              onClick={() => addFilter(tag)}
+              className={`m-1  rounded-sm bg-slate-300 px-1 text-sm font-semibold text-black hover:cursor-pointer ${
+                currentFilter.includes(tag)
+                  ? "border-2 border-green-700 text-green-700"
+                  : "border-2 border-slate-800"
+              }`}
+            >
+              {tag}
+            </button>
+          );
+        })}
+        <button
+          onClick={() => setCurrentFilter([])}
+          className="m-1 rounded-sm border-2 border-slate-800 bg-slate-300 px-1 text-sm font-extrabold text-red-700 hover:cursor-pointer"
+        >
+          X
+        </button>
+      </div>
+
+      <div className="my-4 w-full">
+        {filteredList().map((m) => (
+          <div
+            onClick={() => setSelected(m)}
+            className="my-1 flex cursor-pointer justify-between bg-slate-600  "
+            key={m.src}
+          >
+            {" "}
+            <div className="px-2"> {m.title} </div>{" "}
+            {/* <div>
+              {" "}
+              {m.tags.map((t) => (
+                <div className="ml-3" key={t}>
+                  {t}
+                </div>
+              ))}{" "}
+            </div>{" "} */}
+          </div>
+        ))}
+      </div>
+      {selected && (
+        <div className=" mb-4  w-full">
+          <iframe
+            className=" h-56 w-full sm:h-80"
+            // src={`https://www.youtube.com/embed/${selected.src}`}
+            src={`https://www.youtube-nocookie.com/embed/${selected.src}`}
+            allowFullScreen
+            frameBorder="0"
+          ></iframe>
+        </div>
+      )}
+    </>
+  );
+};
+function Jukebox() {
+  const [youtube, setYoutube] = useState(true);
+  const [radio, setRadio] = useState(false);
 
   return (
     <div className="h-screen bg-slate-700">
-      <div className="flex   flex-col items-center bg-slate-700 text-white">
-        <p className="mb-2 w-screen border-b-4 border-b-slate-400  text-center text-3xl  font-black">
+      <div className="flex  flex-col items-center bg-slate-700 text-white">
+        <p className="mb-2 w-full border-b-4 border-b-slate-400  text-center text-3xl  font-black">
           JUKEBOX
         </p>
 
-        <div className=" m-2 space-x-2">
-          <button
-            className="bg-slate-300 text-black"
-            onClick={() => handleRandom()}
-          >
-            Random
-          </button>
-
-          <button
-            onClick={() => setSelected(null)}
-            className={`bg-slate-300 text-black ${
-              !selected ? "bg-slate-500 " : ""
-            }`}
-            disabled={!selected}
-          >
-            Clear
-          </button>
-        </div>
-
-        <div className="flex">
-          {playListType().map((tag) => {
-            return (
-              <button
-                key={tag}
-                onClick={() => addFilter(tag)}
-                className={`m-1 rounded-sm bg-slate-300 px-1 text-sm font-semibold text-black hover:cursor-pointer ${
-                  currentFilter.includes(tag)
-                    ? "border-2 border-green-700 text-green-700"
-                    : "border-2 border-slate-800"
-                }`}
-              >
-                {tag}
-              </button>
-            );
-          })}
-          <div
-            onClick={() => setCurrentFilter([])}
-            className="m-1 rounded-sm border-2 border-slate-800 bg-slate-300 px-1 text-sm font-extrabold text-red-700 hover:cursor-pointer"
-          >
-            X
-          </div>
-        </div>
-
-        <div className="my-4">
-          {filteredList().map((m) => (
-            <div
-              onClick={() => setSelected(m)}
-              className="my-1 flex cursor-pointer justify-between bg-slate-600  px-2"
-              key={m.src}
+        <div className=" mb-10 flex w-screen max-w-2xl flex-col items-center">
+          <div className="mb-2 flex w-full justify-evenly text-center">
+            <button
+              onClick={() => setYoutube(!youtube)}
+              className={`w-1/2  ${
+                youtube
+                  ? "bg-slate-400 shadow-md shadow-slate-900"
+                  : "bg-slate-300"
+              } py-1 px-6 font-bold text-black`}
             >
-              {" "}
-              <div> {m.title} </div>{" "}
-              <div>
-                {" "}
-                {m.tags.map((t) => (
-                  <div className="ml-3" key={t}>
-                    {t}
-                  </div>
-                ))}{" "}
-              </div>{" "}
-            </div>
-          ))}
-        </div>
-        {selected && (
-          <div className="   w-96">
-            <iframe
-              className=" h-56 w-full"
-              // src={`https://www.youtube.com/embed/${selected.src}`}
-              src={`https://www.youtube-nocookie.com/embed/${selected.src}`}
-              allowFullScreen
-              frameBorder="0"
-            ></iframe>
+              Youtube
+            </button>
+            <div className="w-1 bg-black"></div>
+            <button
+              onClick={() => setRadio(!radio)}
+              className={`w-1/2  ${
+                radio
+                  ? "bg-slate-400 shadow-md shadow-slate-900"
+                  : "bg-slate-300"
+              } py-1 px-6 font-bold text-black`}
+            >
+              Radio
+            </button>
           </div>
-        )}
-        <Radio />
+
+          {youtube && <Youtube />}
+          {youtube && radio && (
+            <div
+              className=" w-full  border-t-4 
+              border-t-slate-400 py-2   text-center text-xl  font-bold text-slate-300
+            "
+            >
+              RADIO
+            </div>
+          )}
+          {radio && <Radio />}
+          {/* <div>contact form</div> */}
+        </div>
       </div>
     </div>
   );
