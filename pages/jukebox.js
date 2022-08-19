@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { createPortal } from "react-dom"; //???update
 
 const T = {
@@ -8,6 +8,8 @@ const T = {
   ANALOG: "ANALOG",
   RADIO: "RADIO",
   VIDEO: "VIDEO",
+  TECHNO: "TECHNO",
+  VINYL: "VINYL",
 };
 
 // "https://www.youtube-nocookie.com/embed/"
@@ -21,7 +23,7 @@ const musicList = [
   {
     src: "KGPhGui0U-g",
     title: "Guest Mix: Salsa Records from Venezuela with Gia Fu",
-    tags: [T.ALBUM, T.ANALOG],
+    tags: [T.VINYL],
   },
   {
     src: "15Nqbic6HZs",
@@ -37,7 +39,7 @@ const musicList = [
   {
     src: "ePZuJl06AuU",
     title: "UK Jazz and Groove with Tina Edwards",
-    tags: [T.ANALOG],
+    tags: [T.VINYL],
   },
 
   {
@@ -49,12 +51,80 @@ const musicList = [
   {
     src: "zw79RVnlCb0",
     title: "Hellraiser (30th Anniversary Edition - Official Animated Video)",
-    tags: [T.VIDEO],
+    tags: [T.VIDEO, T.SONG],
   },
   {
     src: "DgkgGbJwRyo",
     title: "Crooked Colours - Flow [Official Video]",
-    tags: [T.VIDEO],
+    tags: [T.VIDEO, T.SONG],
+  },
+
+  {
+    src: "Koq_6Z_oRBc",
+    title: "Jamiroquai medley",
+    tags: [T.ALBUM],
+  },
+  {
+    src: "qgUhkbMNkkw",
+    title: "groovy house mix on a boat",
+    tags: [T.TECHNO],
+  },
+  {
+    src: "Yy4pcKn0Y_k",
+    title: "The Yussef Dayes Experience - Live At Joshua Tree",
+    tags: [T.LIVE, T.ALBUM],
+  },
+
+  {
+    src: "d33C8IE7WnQ",
+    title: "Tame Impala - InnerSpeaker",
+    tags: [T.LIVE, T.ALBUM],
+  },
+  {
+    src: "YSykw8vOJ-Y",
+    title: "Tommy Guerrero - Soul Food Taqueria ",
+    tags: [T.ALBUM],
+  },
+  {
+    src: "VyJXkKWsxko",
+    title: "Macroblank - 行方不明 ",
+    tags: [T.ALBUM],
+  },
+
+  {
+    src: "F8M3UKx7WkQ",
+    title: "Brazilian Samba Grooves with Carla from Batukizer",
+    tags: [T.VINYL],
+  },
+
+  {
+    src: "MF8RFD7tk48",
+    title: "Persona 5 Jazz Cafe Mix (w/ Cafe & Rain Ambience)",
+    tags: [T.ALBUM],
+  },
+
+  {
+    src: "5QEs2kBZwBg",
+    title: "Santana/Fleetwood Mac Cover - Live",
+    tags: [T.LIVE],
+  },
+
+  {
+    src: "HXRh-7BJD2E",
+    title: "Martin Miller & Paul Gilbert - Superstition",
+    tags: [T.LIVE],
+  },
+
+  {
+    src: "LtUKEfpNTNI",
+    title: "Phil Collins cover",
+    tags: [T.LIVE],
+  },
+
+  {
+    src: "jOUtIdXVySA",
+    title: "Female Japanese '80s",
+    tags: [T.VINYL],
   },
 
   ,
@@ -150,6 +220,8 @@ const Youtube = () => {
   const [selected, setSelected] = useState(null);
   const [currentFilter, setCurrentFilter] = useState([]);
 
+  const playerRef = useRef(null);
+
   const handleRandom = () => {
     // const random = Math.floor(Math.random() * musicList.length);
 
@@ -230,8 +302,15 @@ const Youtube = () => {
       <div className="my-4 w-full">
         {filteredList().map((m) => (
           <div
-            onClick={() => setSelected(m)}
-            className="my-1 flex cursor-pointer justify-between bg-slate-600  "
+            onClick={() => {
+              setSelected(m);
+              playerRef.current.scrollIntoView();
+            }}
+            className={`my-1 flex cursor-pointer justify-between bg-slate-600 ${
+              selected && m.src === selected.src
+                ? "bg-slate-400 font-semibold text-black"
+                : ""
+            } `}
             key={m.src}
           >
             {" "}
@@ -247,8 +326,8 @@ const Youtube = () => {
           </div>
         ))}
       </div>
-      {selected && (
-        <div className=" mb-4  w-full">
+      <div ref={playerRef} className=" mb-4 w-full ">
+        {selected && (
           <iframe
             className=" h-56 w-full sm:h-80"
             // src={`https://www.youtube.com/embed/${selected.src}`}
@@ -256,8 +335,8 @@ const Youtube = () => {
             allowFullScreen
             frameBorder="0"
           ></iframe>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 };
@@ -272,7 +351,7 @@ function Jukebox() {
           JUKEBOX
         </p>
 
-        <div className=" mb-10 flex w-screen max-w-2xl flex-col items-center">
+        <div className="  mb-10 flex w-screen max-w-2xl flex-col items-center ">
           <div className="mb-2 flex w-full justify-evenly text-center">
             <button
               onClick={() => setYoutube(!youtube)}
