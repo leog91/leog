@@ -136,9 +136,38 @@ const radioList = [
     src: ["https://control.streaming-pro.com:8040/live.mp3"],
   },
   {
-    name: "RT2 FM",
-
+    name: "RT2 FM - 🇮🇪",
     src: ["https://www.liveradio.es/http://icecast.rte.ie/ie2fm"],
+  },
+  {
+    name: "HAURAKI - 🇳🇿",
+    src: ["https://ais-nzme.streamguys1.com/nz_009_aac"],
+  },
+  {
+    name: "Antenne 80s - 🇩🇪",
+    src: ["http://s6-webradio.antenne.de/80er-kulthits"],
+  },
+  {
+    name: "The Rock - 🇳🇿",
+    src: ["https://tunein-icecast.mediaworks.nz/rock_128kbps"],
+  },
+
+  {
+    name: "CADENA 3 FM - 🇦🇷",
+    src: ["https://26373.live.streamtheworld.com/CADENA3.mp3"],
+  },
+  {
+    name: "Radio NOVA 100 FM - 🇮🇪",
+    src: ["https://stream.audioxi.com/NOVA"],
+  },
+
+  {
+    name: "VERONICA - 🇳🇱",
+    src: ["https://22543.live.streamtheworld.com/VERONICA.mp3"],
+  },
+  {
+    name: "The Breeze Auckland - 🇳🇿",
+    src: ["http://tunein-icecast.mediaworks.nz/breeze_128kbps"],
   },
 ];
 
@@ -229,6 +258,7 @@ const Youtube = () => {
     //random with filter
 
     setSelected(filteredList()[random]);
+    playerRef.current.scrollIntoView();
   };
 
   const addFilter = (tag) => {
@@ -342,7 +372,7 @@ const Youtube = () => {
 };
 function Jukebox() {
   const [youtube, setYoutube] = useState(true);
-  const [radio, setRadio] = useState(false);
+  const [radio, setRadio] = useState(true);
 
   return (
     <div className="h-screen bg-slate-700">
@@ -352,18 +382,7 @@ function Jukebox() {
         </p>
 
         <div className="  mb-10 flex w-screen max-w-2xl flex-col items-center ">
-          <div className="mb-2 flex w-full justify-evenly text-center">
-            <button
-              onClick={() => setYoutube(!youtube)}
-              className={`w-1/2  ${
-                youtube
-                  ? "bg-slate-400 shadow-md shadow-slate-900"
-                  : "bg-slate-300"
-              } py-1 px-6 font-bold text-black`}
-            >
-              Youtube
-            </button>
-            <div className="w-1 bg-black"></div>
+          <div className="mb-4 flex w-full justify-evenly text-center">
             <button
               onClick={() => setRadio(!radio)}
               className={`w-1/2  ${
@@ -374,19 +393,34 @@ function Jukebox() {
             >
               Radio
             </button>
+            <div className="w-1 bg-black"></div>
+
+            <button
+              onClick={() => setYoutube(!youtube)}
+              className={`w-1/2  ${
+                youtube
+                  ? "bg-slate-400 shadow-md shadow-slate-900"
+                  : "bg-slate-300"
+              } py-1 px-6 font-bold text-black`}
+            >
+              Youtube
+            </button>
           </div>
 
-          {youtube && <Youtube />}
+          {radio && <Radio />}
+
           {youtube && radio && (
             <div
-              className=" w-full  border-t-4 
+              className=" mt-4 w-full border-t-4 
               border-t-slate-400 py-2   text-center text-xl  font-bold text-slate-300
             "
             >
-              RADIO
+              YOUTUBE
             </div>
           )}
-          {radio && <Radio />}
+
+          {youtube && <Youtube />}
+
           {/* <div>contact form</div> */}
         </div>
       </div>
