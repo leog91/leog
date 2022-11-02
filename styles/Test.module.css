@@ -9,9 +9,93 @@
 
 }
 
+.spin{
+    animation: run 3.75s infinite normal linear;
+    
+}
+
+
+
+@keyframes run {
+    0% {
+        transform: rotate(0deg) translate(-165px)  ;
+
+    }
+
+    100% {
+        transform: rotate(360deg) translate(-165px) ;
+    }
+}
+
+/* @keyframes run {
+    0% {
+        
+        opacity: 0;
+    }
+
+    25% {
+        transform: rotate(90deg) translateX(300px) translateY(0px) ;
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    65% {
+        transform: rotate(-10deg) translateX(10px);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(60deg) translateX(400px) translateY(-400px);
+        opacity: 0;
+
+    }
+} */
+
+.card{
+    background-color: brown;
+
+    /* animation: drop_6 12s 3.75s infinite linear, road_60deg_drop 12s 3.75s infinite linear; */
+    animation: drop_6 1.75s infinite normal  linear;
+
+}
+
+
+
+
+@keyframes drop_6 {
+    0% {
+        transform:rotate(60deg) translateX(-400px);
+        opacity: 0;
+    }
+
+    15% {
+            transform: rotate(10deg) translateX(-10px);
+            opacity: 1;
+        }
+
+    50% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+        65% {
+            transform: rotate(-10deg) translateX(10px);
+            opacity: 1;
+        }
+                100% {
+                    transform: rotate(60deg) translateX(400px) translateY(-400px);
+                    opacity: 0;
+        
+                }
+}
+
 
 @keyframes grow {
     from {transform: scale(1)
+        
     }
     to{
         transform: scale(1.5);
@@ -28,3 +112,5 @@
     animation-delay: 100ms;
 
 }
+
+

@@ -3,6 +3,7 @@ import { createPortal } from "react-dom"; //???update
 
 const T = {
   ALBUM: "ALBUM",
+  COVER: "COVER",
   SONG: "SONG",
   LIVE: "LIVE",
   ANALOG: "ANALOG",
@@ -19,6 +20,17 @@ const musicList = [
     src: "b1zR9zm5J1A",
     title: "Àbáse – Laroyê (2021 - Album)",
     tags: [T.ALBUM],
+  },
+  {
+    src: "2CCNswShJRc",
+    title: "Daft Punk | Something About Us | Pomplamoose",
+    tags: [T.COVER],
+  },
+
+  {
+    src: "4Mk_hGfIWIc",
+    title: "American Boy | funk cover",
+    tags: [T.LIVE, T.COVER],
   },
   {
     src: "KGPhGui0U-g",
@@ -96,6 +108,11 @@ const musicList = [
     title: "Brazilian Samba Grooves with Carla from Batukizer",
     tags: [T.VINYL],
   },
+  {
+    src: "Tqm7-zN5s8k",
+    title: "Harry Styles Covers Peter Gabriel’s “Sledgehammer” ",
+    tags: [T.LIVE, T.COVER],
+  },
 
   {
     src: "MF8RFD7tk48",
@@ -106,19 +123,19 @@ const musicList = [
   {
     src: "5QEs2kBZwBg",
     title: "Santana/Fleetwood Mac Cover - Live",
-    tags: [T.LIVE],
+    tags: [T.LIVE, T.COVER],
   },
 
   {
     src: "HXRh-7BJD2E",
     title: "Martin Miller & Paul Gilbert - Superstition",
-    tags: [T.LIVE],
+    tags: [T.LIVE, T.COVER],
   },
 
   {
     src: "LtUKEfpNTNI",
     title: "Phil Collins cover",
-    tags: [T.LIVE],
+    tags: [T.LIVE, T.COVER],
   },
 
   {

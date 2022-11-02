@@ -18,3 +18,9 @@ model recipes {
   // newFieldBis String   @default("dwdd")
   // cartao      String   @default("mister")
 }
+
+model user {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  username String   @unique
+  access   String[]
+}

@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@js-temporal/polyfill": "^0.4.2",
     "@prisma/client": "^4.0.0",
     "formik": "^2.2.6",
     "gray-matter": "^4.0.2",

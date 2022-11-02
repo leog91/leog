@@ -15,7 +15,7 @@ export default function Home({ title, description, ...props }) {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <h1 className="text-lg text-red-800  font-extrabold">
+        <h1 className="text-lg font-extrabold  text-red-800">
           <Link href="/stash">
             <a>
               {"<"}Stash !{">"}
@@ -23,20 +23,14 @@ export default function Home({ title, description, ...props }) {
           </Link>
         </h1>
 
-        <h2>
-          <Link href="/about">
-            <a>About Us</a>
-          </Link>
-        </h2>
-
-        <h1 className="text-lg text-green-500  font-extrabold">
+        <h1 className="text-lg font-extrabold  text-green-500">
           <Link href="/play">
             <a>
               {"<"}Play !{">"}
             </a>
           </Link>
         </h1>
-        <h1 className="text-lg text-blue-700  font-extrabold">
+        <h1 className="text-lg font-extrabold  text-blue-700">
           <Link href="/player">
             <a>
               {"<"}Player !{">"}
@@ -47,7 +41,7 @@ export default function Home({ title, description, ...props }) {
         <div>{description}</div>
         <div>{title}</div>
 
-        <h1 className="text-lg text-purple-700  font-extrabold">
+        <h1 className="text-lg font-extrabold  text-purple-700">
           <Link href="/friendActivity">
             <a>
               {"<"}Friend Activity !{">"}
