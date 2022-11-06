@@ -22,6 +22,12 @@ const musicList = [
     tags: [T.ALBUM],
   },
   {
+    src: "QPPFM8NyuaQ",
+    title:
+      "Miss Monique at the Biosphere Museum, in Montreal, Canada for Cercle",
+    tags: [T.TECHNO],
+  },
+  {
     src: "2CCNswShJRc",
     title: "Daft Punk | Something About Us | Pomplamoose",
     tags: [T.COVER],
@@ -143,8 +149,6 @@ const musicList = [
     title: "Female Japanese '80s",
     tags: [T.VINYL],
   },
-
-  ,
 ];
 
 const radioList = [
@@ -353,10 +357,10 @@ const Youtube = () => {
               setSelected(m);
               playerRef.current.scrollIntoView();
             }}
-            className={`my-1 flex cursor-pointer justify-between bg-slate-600 ${
+            className={`my-1 flex cursor-pointer justify-between   hover:bg-gray-800   hover:text-white ${
               selected && m.src === selected.src
-                ? "bg-slate-400 font-semibold text-black"
-                : ""
+                ? "border-l-4 border-white bg-gray-800 text-white"
+                : "bg-gray-900 text-gray-300"
             } `}
             key={m.src}
           >
@@ -398,7 +402,7 @@ function Jukebox() {
           JUKEBOX
         </p>
 
-        <div className="  mb-10 flex w-screen max-w-2xl flex-col items-center ">
+        <div className="  mb-10 flex  max-w-2xl flex-col items-center ">
           <div className="mb-4 flex w-full justify-evenly text-center">
             <button
               onClick={() => setRadio(!radio)}
