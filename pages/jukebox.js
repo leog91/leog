@@ -377,7 +377,7 @@ const Youtube = () => {
           </div>
         ))}
       </div>
-      <div ref={playerRef} className=" mb-4 w-full ">
+      <div ref={playerRef} className=" mb-4 w-full  ">
         {selected && (
           <iframe
             className=" h-56 w-full sm:h-80"
@@ -396,7 +396,7 @@ function Jukebox() {
   const [radio, setRadio] = useState(true);
 
   return (
-    <div className="h-screen bg-slate-700">
+    <div className="h-screen   bg-slate-700">
       <div className="flex  flex-col items-center bg-slate-700 text-white">
         <p className="mb-2 w-full border-b-4 border-b-slate-400  text-center text-3xl  font-black">
           JUKEBOX
@@ -432,8 +432,8 @@ function Jukebox() {
 
           {youtube && radio && (
             <div
-              className=" mt-4 w-full border-t-4 
-              border-t-slate-400 py-2   text-center text-xl  font-bold text-slate-300
+              className=" mt-4 w-full  
+              border-t-4 border-t-slate-400  py-2 text-center text-xl  font-bold text-slate-300
             "
             >
               YOUTUBE
