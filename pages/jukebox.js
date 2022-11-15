@@ -269,16 +269,19 @@ const CustomIframe = ({ children, ...props }) => {
 const Youtube = () => {
   const [selected, setSelected] = useState(null);
   const [currentFilter, setCurrentFilter] = useState([]);
+  // const [history, setHistory] = useState([]);
 
   const playerRef = useRef(null);
 
   const handleRandom = () => {
-    // const random = Math.floor(Math.random() * musicList.length);
+    const random = Math.floor(Math.random() * musicList.length);
 
-    const random = Math.floor(Math.random() * filteredList().length);
+    // const random = Math.floor(Math.random() * filteredList().length);
     //random with filter
 
-    setSelected(filteredList()[random]);
+    const toSelect = filteredList()[random];
+    // setHistory([...history, toSelect]);
+    setSelected(toSelect);
     playerRef.current.scrollIntoView();
   };
 
@@ -299,12 +302,26 @@ const Youtube = () => {
   return (
     <>
       <div className=" m-2 space-x-2">
+        {/* <button
+          disabled={history.length === 0}
+          className="border-2 border-slate-400 bg-slate-800 p-2 text-slate-300 hover:border-slate-200 hover:text-slate-100 disabled:border-slate-400 disabled:bg-slate-500  disabled:text-slate-300"
+          onClick={() => handlePrevious()}
+        >
+          ⏮<span className="hidden sm:inline-block">Previous</span>
+        </button> */}
         <button
           className="border-2 border-slate-400 bg-slate-800 p-2 text-slate-300 hover:border-slate-200 hover:text-slate-100"
           onClick={() => handleRandom()}
         >
-          Random
+          🔀<span className="hidden sm:inline-block">Random</span>
         </button>
+        {/* <button
+          disabled={history.length === 0}
+          className="border-2 border-slate-400 bg-slate-800 p-2 text-slate-300 hover:border-slate-200 hover:text-slate-100 disabled:border-slate-400 disabled:bg-slate-500  disabled:text-slate-300"
+          onClick={() => handleNext()}
+        >
+          ⏭<span className="hidden sm:inline-block">Next</span>
+        </button> */}
 
         {/* <button
           className="border-2 border-slate-400 bg-slate-800 p-2 text-slate-300 hover:border-slate-200 hover:text-slate-100"
@@ -312,7 +329,6 @@ const Youtube = () => {
         >
           Autoplay
         </button> */}
-
         <button
           onClick={() => setSelected(null)}
           className={` border-2  border-slate-400 p-2  ${
