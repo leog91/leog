@@ -1,19 +1,54 @@
 import Head from "next/head";
 import Link from "next/link";
-import styles from "../styles/Home.module.css";
+
+const colors = {
+  darkRed: "text-red-800",
+  green: "text-green-500",
+  lightBlue: "text-blue-300",
+  lightYellow: "text-yellow-200",
+  slate: "text-slate-300",
+  orange: "text-orange-500",
+};
+
+const pages = [
+  { name: null, url: "admin", textColor: colors.darkRed },
+  { name: null, url: "dash" },
+  { name: "WHATA--DISH", url: "dish", textColor: colors.green },
+  { name: null, url: "dough", textColor: colors.lightYellow },
+  { name: null, url: "folder", textColor: colors.lightBlue },
+  { name: null, url: "formy" },
+  { name: null, url: "fridge" },
+
+  { name: null, url: "jukebox", textColor: colors.slate },
+  { name: null, url: "matrox" },
+  { name: null, url: "mongtest" },
+  { name: null, url: "phone", textColor: colors.orange },
+  { name: null, url: "play" },
+  { name: null, url: "player" },
+  { name: null, url: "producer" },
+  { name: null, url: "stash", textColor: colors.darkRed },
+  { name: null, url: "tasker", textColor: colors.lightBlue },
+  { name: null, url: "test" },
+  { name: null, url: "train", textColor: colors.slate },
+  { name: null, url: "tree" },
+  { name: null, url: "trick", textColor: colors.lightYellow },
+  { name: null, url: "urlate" },
+  { name: null, url: "walker", textColor: colors.lightBlue },
+  { name: null, url: "recipe" },
+  { name: null, url: "post" },
+  { name: null, url: "photography" },
+];
 
 export default function Home({ title, description, ...props }) {
   return (
-    <div className={styles.container}>
+    <div className="flex min-h-screen flex-col items-center bg-zinc-800 text-white">
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+      <main>
+        <h1>index 😃 {pages.length.toString()}</h1>
 
         <h1 className="text-lg font-extrabold  text-red-800">
           <Link href="/stash">
@@ -38,6 +73,24 @@ export default function Home({ title, description, ...props }) {
           </Link>
         </h1>
 
+        {/* //remove <a> link,> check semantic */}
+        {pages.map((p) => (
+          <div
+            key={p.url}
+            className={`text-lg font-extrabold ${
+              p.textColor ? p.textColor : "text-green-500"
+            } `}
+          >
+            <Link href={`/${p.url}`}>
+              <a>
+                {"<"}
+                {p.name ? p.name : p.url}
+                {">"}
+              </a>
+            </Link>
+          </div>
+        ))}
+
         <div>{description}</div>
         <div>{title}</div>
 
@@ -48,52 +101,7 @@ export default function Home({ title, description, ...props }) {
             </a>
           </Link>
         </h1>
-        <p className={styles.description}>
-          Get started by editing test
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
     </div>
   );
 }

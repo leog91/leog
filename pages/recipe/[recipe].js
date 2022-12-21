@@ -13,7 +13,7 @@ export default function Recipe({ frontmatter, markdownBody }) {
     <>
       <div className="bg-gray-300">
         <article className="  flex flex-col place-items-center">
-          <div className="text-gray-700 text-4xl font-bold">
+          <div className="text-4xl font-bold text-gray-700">
             {frontmatter.title}
           </div>
 
@@ -47,11 +47,11 @@ export default function Recipe({ frontmatter, markdownBody }) {
             {frontmatter.author}
           </div>
 
-          {frontmatter.ingredients && (
+          {!!frontmatter.ingredients && (
             <Ingredients ingredients={frontmatter.ingredients} />
           )}
 
-          {frontmatter.nutrition && (
+          {!!frontmatter.nutrition && (
             <Nutrition nutrition={frontmatter.nutrition} />
           )}
 
@@ -60,7 +60,7 @@ export default function Recipe({ frontmatter, markdownBody }) {
           </div>
         </article>
         <div className="flex flex-col place-items-center">
-          <Image src={frontmatter.image} alt={frontmatter.title} unsized />
+          <img width={400} src={frontmatter.image} alt={frontmatter.title} />
         </div>
       </div>
     </>

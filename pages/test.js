@@ -8,6 +8,9 @@ import TapSense from "../components/tapSense";
 import Billboard from "../components/billboard";
 import Tictatoe from "../components/tictatoe";
 import Calendar from "../components/calendar";
+import FriendActivity from "../components/friendListStatus";
+import Timeline from "../components/timeline";
+import House from "../components/house";
 
 // ("!just  for prototyping  !");
 
@@ -46,21 +49,35 @@ function Test() {
 
         <div className={`${styles.test} text-white`}> test</div>
 
-        <div className=" flex w-full  flex-col items-center justify-center overflow-hidden  bg-slate-400">
-          <div
-            className={` ${styles.card}   rounded-full border-4 border-purple-400   bg-blue-300  px-3 py-5 text-center  text-6xl text-black`}
-          >
-            {" "}
-            🌚
-          </div>
+        <div className="m-3">
+          <FriendActivity />
+        </div>
+        <div className="m-3">
+          <Timeline />
+        </div>
 
-          <div
-            className={` ${styles.spin}    rounded-full border-4 border-purple-400 bg-blue-300 p-4 px-3 py-5 text-6xl text-black `}
-          >
-            {" "}
-            🌚
+        <div className="my-10  shadow-2xl shadow-white drop-shadow-lg ">
+          <House />
+        </div>
+        <div className="m-3 w-full">
+          <div className=" flex h-96 w-full flex-col items-center justify-center overflow-hidden  bg-slate-400">
+            <div
+              className={` ${styles.card}   rounded-full border-4 border-purple-400   bg-blue-300  px-3 py-5 text-center  text-6xl text-black`}
+            >
+              {" "}
+              🌚
+            </div>
+
+            <div
+              className={` ${styles.spin}    rounded-full border-4 border-purple-400 bg-blue-300 p-4 px-3 py-5 text-6xl text-black `}
+            >
+              {" "}
+              🌚
+            </div>
           </div>
         </div>
+
+        <div className="m-10 text-6xl font-light text-gray-200"> BYE</div>
       </div>
     </div>
   );
