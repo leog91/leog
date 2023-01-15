@@ -15,6 +15,43 @@
       transform: rotate(20deg);
     }
   }
+
+  .road {
+    width: 240px;
+
+    background-color: palegreen;
+    color: darkgreen;
+    text-align: center;
+
+    animation: roadmove 1s infinite;
+    animation-timing-function: linear;
+    //animation-direction: alternate;
+  }
+
+  @keyframes roadmove {
+    0% {
+      transform: translate(-60vw, 0vh);
+    }
+    50% {
+      transform: translate(0vw, 0vh);
+    }
+
+    60% {
+      transform: translate(0vw, 15vh);
+    }
+
+    75% {
+      transform: translate(15vw, 15vh);
+    }
+    85% {
+      transform: translate(15vw, 30vh);
+    }
+
+    100% {
+      transform: translate(60vw, 30vh);
+    }
+  }
+
   .card {
     background-color: red;
     width: 30px;
@@ -39,12 +76,11 @@
     }
   }
 
-.verticalText {
-  writing-mode: vertical-rl;
+  .verticalText {
+    writing-mode: vertical-rl;
     text-orientation: upright;
-    
-}
-  
+  }
+
   .circle {
     width: 100px;
     transform: translateX(200px);
