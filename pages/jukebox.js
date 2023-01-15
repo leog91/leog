@@ -11,6 +11,10 @@ const T = {
   VIDEO: "VIDEO",
   TECHNO: "TECHNO",
   VINYL: "VINYL",
+  CHILL: "CHILL",
+  PIANO: "PIANO",
+  VOICE: "VOICE",
+  EDM: "EDM", //Electronic dance music
 };
 
 // "https://www.youtube-nocookie.com/embed/"
@@ -21,6 +25,32 @@ const musicList = [
     title: "Àbáse – Laroyê (2021 - Album)",
     tags: [T.ALBUM],
   },
+
+  {
+    src: "J5oZ80Daduc",
+    title: "Hania Rani live at Invalides - Cercle",
+    tags: [T.ALBUM, T.VOICE, T.PIANO, T.CHILL, T.LIVE],
+  },
+
+  {
+    src: "_3EuiU1qdpE",
+    title: "Hania Rani - (Live on KEXP)",
+    tags: [T.ALBUM, T.VOICE, T.PIANO, T.CHILL, T.LIVE],
+  },
+
+  {
+    src: "fYdVbUMyBGE",
+    title: "Japanese City Pop",
+    tags: [T.ALBUM],
+  },
+
+  {
+    src: "5zqlgMh4aYs",
+    title:
+      "Feel Like Makin' Love - Toshiki Soejima : Live & Recording 2022 / Neo-Soul Guitar",
+    tags: [T.ANALOG],
+  },
+
   {
     src: "QPPFM8NyuaQ",
     title:
@@ -418,7 +448,7 @@ function Jukebox() {
           JUKEBOX
         </p>
 
-        <div className="  mb-10 flex  max-w-2xl flex-col items-center ">
+        <div className="  mb-10 flex w-full max-w-2xl flex-col items-center ">
           <div className="mb-4 flex w-full justify-evenly text-center">
             <button
               onClick={() => setRadio(!radio)}
