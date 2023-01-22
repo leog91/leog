@@ -18,7 +18,7 @@ const pages = [
   { name: null, url: "folder", textColor: colors.lightBlue },
   { name: null, url: "formy" },
   { name: null, url: "fridge" },
-
+  { name: null, url: "rockPaperScissors", textColor: colors.darkRed },
   { name: null, url: "jukebox", textColor: colors.slate },
   { name: null, url: "matrox" },
   { name: null, url: "mongtest" },
