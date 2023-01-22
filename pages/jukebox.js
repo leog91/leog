@@ -14,6 +14,7 @@ const T = {
   CHILL: "CHILL",
   PIANO: "PIANO",
   VOICE: "VOICE",
+  JUNGLE: "JUNGLE",
   EDM: "EDM", //Electronic dance music
 };
 
@@ -24,6 +25,24 @@ const musicList = [
     src: "b1zR9zm5J1A",
     title: "Àbáse – Laroyê (2021 - Album)",
     tags: [T.ALBUM],
+  },
+
+  {
+    src: "Oa4MT9LPcaU",
+    title: "P I Z Z A H O T L I N E - L E V E L S E L E C T",
+    tags: [T.ALBUM, T.EDM, T.JUNGLE],
+  },
+
+  {
+    src: "5zqlgMh4aYs",
+    title: "Feel Like Makin' Love - Toshiki Soejima Neo-Soul Guitar",
+    tags: [T.LIVE, T.SONG],
+  },
+
+  {
+    src: "v_9qEOENM9M",
+    title: "Selected Sessions Dom Dolla Belgrade DJ Set",
+    tags: [T.LIVE, T.TECHNO, T.EDM],
   },
 
   {
@@ -42,13 +61,6 @@ const musicList = [
     src: "fYdVbUMyBGE",
     title: "Japanese City Pop",
     tags: [T.ALBUM],
-  },
-
-  {
-    src: "5zqlgMh4aYs",
-    title:
-      "Feel Like Makin' Love - Toshiki Soejima : Live & Recording 2022 / Neo-Soul Guitar",
-    tags: [T.ANALOG],
   },
 
   {
