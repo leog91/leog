@@ -18,9 +18,17 @@ const T = {
   EDM: "EDM", //Electronic dance music
 };
 
+//album, to set/long
+
 // "https://www.youtube-nocookie.com/embed/"
 // "https://www.youtube.com/embed/
 const musicList = [
+  {
+    src: "sp3B97N67Cw",
+    title: "Hania Rani - @arteconcert's Piano Day",
+    tags: [T.ALBUM, T.PIANO],
+  },
+
   {
     src: "b1zR9zm5J1A",
     title: "Àbáse – Laroyê (2021 - Album)",
@@ -28,11 +36,101 @@ const musicList = [
   },
 
   {
+    src: "vnKKNZLVh2Q",
+    title: "Best Of French 79",
+    tags: [T.ALBUM, T.EDM],
+  },
+
+  {
     src: "Oa4MT9LPcaU",
     title: "P I Z Z A H O T L I N E - L E V E L S E L E C T",
     tags: [T.ALBUM, T.EDM, T.JUNGLE],
   },
+  //
 
+  {
+    src: "KcYU6b_9hSw",
+    title: "Pizza Hotline - DELIVERY BOY 2099 // 配達少年2099",
+    tags: [T.ALBUM, T.CHILL],
+  },
+
+  {
+    src: "DXKojYz25Gw",
+    title:
+      "Japanese soft indie/rock, that would be in Goodnight Punpun's playlist",
+    tags: [T.ALBUM],
+  },
+
+  {
+    src: "Fs0el7QmrOs",
+    title: "Melodic Techno w/ M&K || Artbat, Solomun, Adriatique, Monolink",
+    tags: [T.ALBUM, T.EDM],
+  },
+
+  {
+    src: "hzWl_j__KFU",
+    title: "Songs that will Cure Your Hangover with Ceylan Göksel",
+    tags: [T.ALBUM, T.ANALOG],
+  },
+
+  {
+    src: "dJTUe_WDgro",
+    title: "Space Jazz | Jazzy Beats | 1 Hour Playlist",
+    tags: [T.ALBUM, T.CHILL],
+  },
+
+  {
+    src: "9qcr708w1HY",
+    title: "Jazz Sabbath - Jazz Sabbath (2020) [Full Album]",
+    tags: [T.ALBUM, T.CHILL],
+  },
+  //
+
+  {
+    src: "EBEmAFHF4XA",
+    title: "Relaxing music from Gran Turismo #1 (GT2 - 6)",
+    tags: [T.ALBUM],
+  },
+
+  {
+    src: "k7HmLM7ZBBU",
+    title: "Soft Chill House Mix - Amii Watson B2B Jimmi Harvey",
+    tags: [T.ALBUM, T.EDM],
+  },
+  //
+
+  //
+  {
+    src: "0RXdd0pCJ9Q",
+    title: "DWIG - Orange Evening - Laut & Luise (LUL007) ",
+    tags: [T.SONG, T.VIDEO, T.EDM],
+  },
+  //
+
+  {
+    src: "rtL5oMyBHPs",
+    title: "MGMT - Little Dark Age ",
+    tags: [T.SONG, T.VIDEO],
+  },
+
+  //
+  {
+    src: "5w7Lv4rVoLU",
+    title: "Amsterdam Rooftop House Mix by FR3ADY | Rooftop Tapes Vol. I",
+    tags: [T.EDM, T.ALBUM],
+  },
+  {
+    src: "bJwjJc4Op30",
+    title: "FLOW TECHNO DJ SET - DREAMORAVE",
+    tags: [T.EDM, T.ALBUM],
+  },
+  //
+  {
+    src: "Pn-R9HhUQZs",
+    title: "WAKE UP TECHNO SET - DREAMORAVE",
+    tags: [T.EDM, T.ALBUM],
+  },
+  //
   {
     src: "5zqlgMh4aYs",
     title: "Feel Like Makin' Love - Toshiki Soejima Neo-Soul Guitar",
