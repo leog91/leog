@@ -117,11 +117,11 @@ function Showcase() {
         </div>
       </div>
 
-      <div className="mt-6 flex flex-wrap justify-center gap-5">
+      <div className=" mt-6 flex flex-wrap justify-center gap-5 overflow-hidden ">
         {events.map((e) => (
           <div
             key={e.img}
-            className="group relative border-2 border-black transition-all delay-75 hover:scale-105 hover:cursor-pointer "
+            className="group relative mt-3 border-2 border-black transition-all delay-75 hover:scale-105 hover:cursor-pointer "
           >
             <div className="absolute left-2 top-2 h-full w-full bg-black " />
 
