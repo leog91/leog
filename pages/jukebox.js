@@ -30,6 +30,64 @@ const musicList = [
   },
 
   {
+    src: "QVTWvOzktbE",
+    title: "Deep Lo-Fi House Mix #2",
+    tags: [T.ALBUM, T.EDM],
+  },
+
+  {
+    src: "dfWzm_I5euQ",
+    title: "Another day | Minimal & Lofi House Mix | dj cakewaffle",
+    tags: [T.ALBUM, T.EDM],
+  },
+
+  {
+    src: "s-jtdKjzQaE",
+    title:
+      "70s Japanese Jazz Mix (Jazz-funk, Soul Jazz, Rare groove, Drum Breaks..)",
+    tags: [T.ALBUM, T.PIANO],
+  },
+
+  {
+    src: "0Itos0zfA3s",
+    title: "Coldhands - Oncle House",
+    tags: [T.ALBUM, T.EDM],
+  },
+  //
+
+  {
+    src: "J0yHr-h0apc",
+    title: "Best Acid Jazz and Funky Instrumentals Vol 3 - 2 h. Non Stop 2023",
+    tags: [T.ALBUM, T.LIVE],
+  },
+
+  {
+    src: "sWqDIZxO-nU",
+    title: "In Rainbows | Radiohead | From The Basement",
+    tags: [T.ALBUM, T.LIVE],
+  },
+
+  {
+    src: "VGF8FAV1eeM",
+    title: "3 hour vinyl deep house & techno dj mix | Joe Sansom",
+    tags: [T.ALBUM, T.EDM],
+  },
+
+  {
+    src: "HHOn8u-c2wk",
+    title: "Himiko Kikuchi - Flying Beagle (1987)",
+    tags: [T.ALBUM, T.PIANO],
+  },
+
+  {
+    src: "bEMqVrbAPtA",
+    title: "Barber Beats but I tell you what all the samples are",
+    tags: [T.ALBUM, T.CHILL],
+  },
+
+  //
+
+  {
     src: "b1zR9zm5J1A",
     title: "Àbáse – Laroyê (2021 - Album)",
     tags: [T.ALBUM],
